@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap-5/css/bootstrap.min.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'doctoronlinemaster/dashboard.css' %}">
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/popper.js' %}"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'doctoronlinemaster/dataTables.jqueryui.min.css' %}">
+    {% load static %}
+    <script src="{% static 'bootstrap-5/js/bootstrap.min.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jquery-3.5.1.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jquery.jcarousel.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jquery.dataTables.min.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/dataTables.jqueryui.min.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jQuery.print.min.js' %}"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mainnav">
+        
+        <div class="logo-container d-flex">
+            <div class="logo-img-container">
+                <img src="{% static 'Images/doctoronline.svg' %}" width="60" height="40" alt="">
+            </div>
+            <div class="navbar-brand">DoctorOnline</div>
+        </div>
+        <div class="container-fluid">
+            <button class="navbar-toggler bg-dark" data-bs-toggle="collapse" data-bs-target="#navbarmaincollapse">
+                <span class="navbar-toggler-icon text-light"></span>
+            </button>
+           <div class="collapse navbar-collapse" id="navbarmaincollapse">
+               <ul class="navbar-nav nav tab-list" role="tablist">
+                   <li class="nav-item py-3 my-2" role="presentation">
+                       <a href="#" class="nav-link text-light" data-bs-toggle="tab" data-bs-target="#appointments">Appointments</a>
+                    </li>
+                   <li class="nav-item py-3 my-2" role="presentation">
+                       <a href="#" class="nav-link text-light" data-bs-toggle="tab" data-bs-target="#homecare">Home Care</a>
+                    </li>
+                   <li class="nav-item py-3 my-2" role="presentation">
+                       <a href="" class="nav-link text-light" data-bs-toggle="tab" data-bs-target="#emergency">Emergency Services</a>
+                    </li>
+                   
+               </ul>
+           </div>
+           <div class="d-flex align-items-center">
+            <div class="position-relative">
+                <a class="p-2 me-2 btn text-decoration-none" data-bs-toggle="dropdown" data-bs-target="#navmaindropdown">
+                  <i class="fas fa-bars text-light"></i>
+                </a>
+                <ul class="dropdown-menu fade position-absolute " id="navmaindropdown" style="left: -50px !important;" data-bs-popper="false">
+                    <li class="nav-item d-flex align-items-center justify-content-center"><i class="fas fa-user"></i><a href="#" class="nav-link">Profile</a></li>
+                    <li class="nav-item d-flex align-items-center justify-content-center"><i class="fas fa-power-off"></i><a href="{% url 'doctoronlinemaster:login'%}" class="nav-link">Log Out</a></li>
+                </ul>
+            </div>
+               <span class="text-light mx-2">Welcome</span>
+               <span class="rounded-pill bg-primary  text-light p-2 d-flex align-items-center justify-content-center" style="width:30px;height:30px;">B</span>
+               
+           </div>
+        </div>
+      
+    </nav>
+    <div class="main-content container-fluid">
+        <div class="main-left d-none d-md-block">
+            <ul class="nav nav-tabs flex-column border-end border-light border-2 py-2" role="tablist">
+             <li class="nav-item" role="presentation">
+                 <a href="#" class="nav-link text-dark fs-4" role="tab" data-bs-toggle="tab" data-bs-target="#profile">Profile</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="#" class="nav-link text-dark fs-4 active" data-bs-toggle="tab" data-bs-target="#appointments">Appointments</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="#" class="nav-link text-dark fs-4" data-bs-toggle="tab" data-bs-target="#homecare">Home Care</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="#" class="nav-link text-dark fs-4" data-bs-toggle="tab" data-bs-target="#emergency">Emergency Services</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="{% url 'doctoronlinemaster:home'%}" class="nav-link text-dark fs-4">Log Out</a>
+                </li>
+            </ul>
+        </div>
+        <div class="main-right ">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" role="tabpanel" id="appointments">
+                    <div class="container-fluid p-2 my-2">
+                        <div class="container-fluid border border-light border-2 rounded mb-2 p-2">
+                            <div class="d-flex p-2 justify-content-between">
+                                <h5 class="lead p-2 m-2">Your Active Appointments</h5>
+                                <button class="btn btn-danger" style="height: fit-content !important;" id="active-appointments-btn">Print</button>
+                            </div>
+                            {% if activeappointments.count > 0 %}
+                            <div class="container-fluid py-2 my-2 border border-light border-2 rounded" id="active-appointments">
+                                <table class="display w-100">
+                                    <thead>
+                                        <tr>
+                                            <td>Appointments Type</td>
+                                            <td>Start Time</td>
+                                            <td>End Time</td>
+                                            <td>user</td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for app in activeappointments %}
+                                        <tr>
+                                            <td>{{app.typeOfAppointment}}</td>
+                                            <td>{{app.start_time}}</td>
+                                            <td>{{app.end_time}}</td>
+                                            <td>{{app.patient}}</td>
+                                            <td><a href="#" class="text-decoration-none">View Details</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="container-fluid text-center p-5 border border-light rounded my-2">
+                                <span class="lead">No Active Appointments</span>
+                            </div>
+                            {% endif %}
+                            {% if allappointments.count > 0%}
+                            <div class="d-flex p-2 justify-content-between">
+                                <h5 class="lead py-3 px-2">All Previous Appointments</h5>
+                                <button class="btn btn-danger" style="height: fit-content !important;" id="previous-appointments-btn">Print</button>
+                            </div>
+                            <div class="container-fluid py-2 my-2" id="previous-appointments">
+                                <table class="display w-100">
+                                    <thead>
+                                        <tr>
+                                            <td>Appointments Type</td>
+                                            <td>Start Time</td>
+                                            <td>End Time</td>
+                                            <td>user</td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for app in allappointments %}
+                                        <tr>
+                                            <td>{{app.typeOfAppointment}}</td>
+                                            <td>{{app.start_time}}</td>
+                                            <td>{{app.end_time}}</td>
+                                            <td>{{app.patient}}</td>
+                                            <td><a href="#" class="text-decoration-none">View Details</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                       
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="container-fluid p-5 text-center border border-light rounded">
+                                <span class="lead">No Previous Appointments</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="homecare">
+                    <div class="container-fluid p-2">
+                        <div class="assigned-specialists border-top border-light border-4">
+                            <div class="d-flex p-2 justify-content-between">
+                                <h4 class="lead p-2 m-2">Your Assigned Client</h4>
+                                <button class="btn btn-danger" style="height: fit-content !important;" id="active-assigned-clients">Print</button>
+                            </div>
+                            {% if activehomecare.count > 0 %}
+                            <div class="container-fluid" id="active-homecare-services">
+                            {% for hs in activehomecare %}
+                            <div class="container-fluid p-2 my-2 d-flex flex-column flex-md-row justify-content-md-between border-bottom border-2 border-dark" >
+                                <div class="assigned-specialist-container">
+                                    <div class="assigned-specialist-header my-2">
+                                        <div class="assigned-specialist-img-container rounded-pill p-2" style="max-width: 300px;max-height: 300px;">
+                                            <img src="{{hs.patient.profile_photo.url}}" style="width: 100%;height: 100%;" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="assigned-specialist-details d-flex flex-column">
+                                       <span class="assigned-specialist-name lead">Name <span>{{hs.patient.first_name}} {{hs.patient.last_name}}</span></span>
+                                       <div class="d-flex flex-column p-2">
+                                           <span class="assigned-specialist-name lead">Type Of Service</span>
+                                           <p>{{hs.homecareservice.type}}</p>
+                                       </div>
+                                       <button class="btn btn-success btn-sm my-2">Client Details</button>
+                                    </div>
+                                </div>
+                                <div class="current-homecare-details">
+                                    <h4 class="lead p-2 m-2">Details</h4>
+                                    <div class="d-flex flex-column p-2 m-2">
+                                        <div class="d-flex flex-column">
+                                            <span class="lead">Type of Service</span>
+                                            <span>{{hs.homecareservice.type}}</span>
+                                        </div>
+                                        <span class="lead">Start Date: <span>{{hs.start_date}}</span></span>
+                                        <span class="lead">End Date: <span>{{hs.end_date}}</span></span>
+                                        <button class="btn btn-success btn-sm my-2 mt-auto">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="container-fluid p-5 my-2 text-center border border-light rounded">
+                                <span class="lead">No Active Home Care Services</span>
+                            </div>
+                            {% endif %}
+                           <div class="container-fluid border-top border-light border-3">
+                               <div class="d-flex p-2 justify-content-between">
+                                <h5 class="lead py-3 m-2">Previous Assigned Homecare Services</h5>
+                                <button class="btn btn-danger" style="height: fit-content !important;" id="previous-assigned-clients">Print</button>
+                               </div>
+                               {% if allhomecareservices.count > 0%}
+                                <div class="container-fluid" id="previous-homecare-services">
+                                     <table class="display w-100">
+                                         <thead>
+                                             <tr>
+                                                 <td>Type</td>
+                                                 <td>Client</td>
+                                                 <td>Start Date</td>
+                                                 <td>End Date</td>
+                                                 <td></td>
+                                             </tr>
+                                         </thead>
+                                         <tbody>
+                                             {% for hs in allhomecareservices %}
+                                             <tr>
+                                                <td>{{hs.homecareservice.type}}</td>
+                                                <td>{{hs.patient.email}}</td>
+                                                <td>{{hs.start_date}}</td>
+                                                <td>{{hs.end_time}}</td>
+                                                <td><a href="#" class="text-decoration-none">View Details</a></td>
+                                            </tr>
+                                             {% endfor %}
+                                           
+                                         </tbody>
+       
+                                     </table>
+                                     
+                                </div>
+                                {% else %}
+                                     <div class="container-fluid p-5 my-2 text-center border border-light rounded">
+                                         <span class="lead">No Previous Assigned Homecare Services</span>
+                                     </div>
+                                {% endif %}
+                           </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="emergency">
+                    <div class="container-fluid p-2 py-2 border border-light border-3 rounded">
+                        <div class="container-fluid p-2 py-2">
+                            <div class="d-flex p-2 justify-content-between">
+                                <h2 class="lead p-2 my-2 Lead">Ambulances Assigned To</h2>
+                                <button class="btn btn-danger" style="height: fit-content !important;" id="active-assigned-ambulances-btn">Print</button>
+                            </div>
+                            {% if activeassignedambulances.count > 0%}
+                            <div class="container-fluid p-2 my-2 border border-light rounded border-1" id="active-assigned-ambulances">
+                                 <table class="display w-100">
+                                      <thead>
+                                          <tr>
+                                              <td>Ambulance Name</td>
+                                              <td>Location</td>
+                                              <td>Time</td>
+                                              <td>Photo</td>
+                                              <td></td>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                       {% for or in activeassignedambulances %}
+                                       <tr>
+                                        <td>{{or.ambulance.name}}</td>
+                                        <td>{{or.ambulance.location}}</td>
+                                        <td>{{or.date_ordered}}</td>
+                                        <td style="max-height: 200;max-width: 200px;" class="p-2">
+                                            <img src="{{or.ambulance.image.url}}"  style="width: 100%;height: 100%;" alt="">
+                                        </td>
+                                        <td><a href="#" class="text-decoration-none">View Details</a></td>
+                                        
+                                    </tr>
+                                       {% endfor %}
+                                        
+                                      </tbody>
+                                 </table>
+                            </div>
+                            {% else %}
+                            <div class="container-fluid p-2 text-center">
+                                <span class="lead">No Active Assigned Ambulances</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="container-fluid p-2 py-2 border border-light border-2 rounded">
+                            <div class="d-flex p-2 justify-content-between">
+                                <h4 class="lead p-2 my-2">Previously Assigned Ambulance Services</h4>
+                                <button class="btn btn-danger" style="height: fit-content !important;" id="previous-assigned-ambulances-btn">Print</button>
+                            </div>
+                            {% if assignedambulances.count > 0 %}
+                            <div class="container-fluid border border-light border-1 rounded p-2 my-2" id="previous-assigned-ambulances">
+                                <table class="display w-100">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Location</td>
+                                            <td>Time | Date</td>
+                                            <td>Photo</td>
+                                            <td></td>
+                                        </tr>
+                                       
+                                    </thead>
+                                    <tbody>
+                                        {% for or in assignedambulances%}
+                                        <tr>
+                                            <td>{{or.ambulance.name}}</td>
+                                            <td>{{or.ambulance.location}}</td>
+                                            <td>{{or.date_ordered}}</td>
+                                            <td style="max-height: 200;max-width: 200px;" class="p-2">
+                                                <img src="{{or.ambulance.image.url}}"  style="width: 100%;height: 100%;" alt="">
+                                            </td>
+                                            <td><a href="#" class="text-decoration-none">View Details</a></td>
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                      
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="container-fluid p-2 text-center">
+                                <span class="lead">No Previously assigned Ambulances</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="profile">
+                    <div class="container-fluid bg-white" >
+                        <div class="container-fluid border border-light border-3 rounded pt- mt-2 ">
+                            <h5 class="p-2 py-2">Personal Details</h5>
+                            <div class="container-fluid bg-white">
+                                <form action="" class="d-flex flex-column  p-2">
+                                    <div class="d-flex flex-column-reverse flex-md-row p-2 my-2 justify-content-between py-2 border border-light rounded">
+                                        <div class="d-flex flex-column justify-content-between">
+                                            <label for="" class="form-label p-2 text-nowrap">Your Profile photo</label>
+                                            <input type="file" name="profile_photo"  id="profile_photo" class="form-control">
+                                        </div>
+                                        <div class="profile-photo-img-container rounded-pill p-2 bg-light text-center" style="max-width: 300px;height: 250px;min-width: 200px;min-height: 200px;">
+                                            {% if profile_img %}
+                                            <img src="{{user.profile_photo.url}}" class="rounded-pill" id="profile_img" style="width: 100%; height: 100%;"  alt="">
+                                            {% else %}
+                                             <i class="fas fa-user" style="font-size: xx-large;"></i>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="input-control d-flex flex-column flex-sm-row py-2 my-2  border border-light rounded">
+                                        <div class="d-flex flex-fill">
+                                            <label for="" class="form-label text-nowrap p-2 m-2">Fist Name</label>
+                                            <input type="text" name="first_name" id="last_name" class="form-control p-2 m-2 flex-fill" value="{{user.first_name}}">
+                                        </div>
+                                        <div class="d-flex flex-fill">
+                                            <label for="" class="form-label text-nowrap p-2 m-2">Last Name</label>
+                                            <input type="text" name="last_name" id="last_name" class="form-control p-2 m-2 flex-fill" value="{{user.last_name}}">
+                                        </div>
+                                    </div>
+                                    <div class="input-containet d-flex flex-column flex-sm-row p-2 my-2 border border-light rounded">
+                                        <label for="" class="form-label p-2 m-2">Email</label>
+                                        <input type="email" name="email" id="email" class="form-control p-2 m-2" value="{{user.email}}">
+                                    </div>
+                                    <div class="input-containet d-flex flex-column flex-sm-row p-2 my-2 border border-light rounded">
+                                        <label for="" class="form-label p-2 m-2 text-nowrap">About Yourself</label>
+                                        <textarea name="about" id="about" cols="30" rows="10" class="form-control" value="{{user.about}}"></textarea>
+                                    </div>
+                                    <div class="input-containet d-flex flex-column flex-sm-row p-2 my-2 border border-light rounded">
+                                        <label for="" class="form-label p-2 m-2 text-nowrap">Country</label>
+                                        <select name="country" id="country" class="form-select"></select>
+                                    </div>
+                                    <div class="input-containet d-flex flex-column flex-sm-row p-2 my-2 border border-light rounded">
+                                        <label for="" class="form-label p-2 m-2 text-nowrap">Town</label>
+                                        <select name="city" id="city" class="form-select"></select>
+                                    </div>
+                                    <div class="input-containet d-flex flex-column flex-sm-row p-2 my-2 border border-light rounded">
+                                      <div class="d-flex align-items-center">
+                                          <label for="" class="form-label p-2 m-2">Availability</label>
+                                          <input type="checkbox" name="availability" id="availability" class="form-check p-2 m-2" checked="{{user.availability}}">
+                                      </div>
+                                      <div class="d-flex align-items-center">
+                                        <label for="" class="form-label p-2 m-2">Online</label>
+                                        <input type="checkbox" name="online" id="online" class="form-check p-2 m-2" checked="{{user.online}}">
+                                    </div>
+                                      
+                                    </div>
+                                    <button class="btn-lg btn btn-success align-self-end my-2">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="container-fluid border border-light rounded py-2 mt-3">
+                            <h4 class="p-2 my-2">Your Specialization</h4>
+                            <form action="" class="d-flex flex-column p-2">
+                                <div class="input-containet d-flex flex-column flex-sm-row p-2 my-2 border border-light rounded">
+                                    <label for="" class="form-label p-2 m-2 text-nowrap">Type</label>
+                                    <select name="" id="" class="form-select"></select>
+                                    <button class="btn-sm btn btn-danger p-2 m-2">Add</button>
+                                </div>
+                                <div class="input-containet d-flex flex-column flex-sm-row p-2 my-2 border border-light rounded">
+                                    <label for="" class="form-label p-2 m-2 text-nowrap">Description</label>
+                                    <textarea name="" class="form-control" id="" cols="30" rows="10"></textarea>
+                                </div>
+                                <button class="btn btn-success btn-lg my-2 align-self-end">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        $(document).ready(function(){
+            $("table").DataTable()
+
+            //profile photo change
+              var profilePhotoInput=document.getElementById("profile_photo");
+              var profileImg=document.getElementById("profile_img");
+              profilePhotoInput.addEventListener("change",function(){
+                  var file=this.files[0]
+                  var url=URL.createObjectURL(file)
+                  profileImg.src=url
+              })
+            //end of profile photo change
+
+            //printing
+               var activeAppointment=document.getElementById("active-appointments-btn")
+               activeAppointment.addEventListener("click",function(){
+                   var activeappointments=document.getElementById("active-appointments");
+                   var toolbar=$(activeappointments).find(".fg-toolbar")
+                   toolbar.css({
+                       "display":"none"
+                   })
+                   $("#active-appointments").print({
+                       title:"Active Appointments"
+                   })
+                   toolbar.css({
+                       "display":"block"
+                   })
+               })
+               var previousAppointmentBtn=document.getElementById("previous-appointments-btn")
+               previousAppointmentBtn.addEventListener("click",function(){
+                  var previousappointments= $("#previous-appointments");
+                  var toolbar=$(previousappointments).find(".fg-toolbar")
+                   toolbar.css({
+                       "display":"none"
+                   })
+                  previousappointments.print({
+                      title:"Previous Appointments"
+                  })
+                  toolbar.css({
+                       "display":"block"
+                   })
+               })
+
+               var activeHomecareBtn=document.getElementById("active-assigned-clients")
+               activeHomecareBtn.addEventListener("click",function(){
+                  var activeHomecare=document.getElementById("active-homecare-services");
+                  var btns=$(activeHomecare).find(".btn")
+                  btns.css({
+                      "display":"none"
+                  })
+                  $(activeHomecare).print({
+                      title:"Active Homecare"
+                  })
+                  btns.css({
+                      "display":"inline-block"
+                  })
+               })
+
+               var previousHomecareBtn=document.getElementById("previous-assigned-clients");
+               previousHomecareBtn.addEventListener("click",function(){
+                   var previousHomecare=$("#previous-homecare-services")
+                   var toolbar=$(previousHomecare).find(".fg-toolbar")
+                   toolbar.css({
+                       "display":"none"
+                   })
+                   previousHomecare.print({
+                       title:"Previously assigned Homecare services"
+                   })
+                   toolbar.css({
+                       "display":"block"
+                   })
+               })
+
+               var activeambulancesBtn=document.getElementById("active-assigned-ambulances-btn")
+               activeambulancesBtn.addEventListener("click",function(){
+                   var activeappointments=$("#active-assigned-ambulances");
+                   var toolbar=$(activeappointments).find(".fg-toolbar")
+                   var trs=$(activeappointments).find("table> tbody > tr > td");
+                  
+                   trs.css({
+                       "display":"block"
+                   })
+                   toolbar.css({
+                       "display":"none"
+                   })
+                   activeappointments.print({
+                       title:"Active assigned Ambulances"
+                   })
+                   toolbar.css({
+                       "display":"block"
+                   })
+                   trs.css({
+                       "display":"table-cell"
+                   })
+               })
+               var previousAmbulanceBtn=document.getElementById("previous-assigned-ambulances-btn")
+               previousAmbulanceBtn.addEventListener("click",function(){
+                   var previousappointments=$("#previous-assigned-ambulances");
+                   var toolbar=$(previousappointments).find(".fg-toolbar")
+                   var trs=$(previousappointments).find("table> tbody > tr > td");
+                  
+                   trs.css({
+                       "display":"block"
+                   })
+                   toolbar.css({
+                       "display":"none"
+                   })
+                   previousappointments.print({
+                       title:"Previous Assigned Ambulances"
+                   })
+                   toolbar.css({
+                       "display":"block"
+                   })
+                   trs.css({
+                       "display":"table-cell"
+                   })
+               })
+            //end of printing
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+.main-nav{
+    background: linear-gradient(to right,#ed1c24,#000845) !important;
+}
+#logoutdropdown li a{
+    border: none;
+}
+#logoutdropdown li:hover,#logoutdropdown a:hover{
+    background: whitesmoke !important;
+}
+#logoutdropdown a:hover{
+    border: none !important;
+    /* background: whitesmoke !important; */
+}
+/* #logoutdropdown a.active{
+    background: white !important;
+    border: none !important;
+} */
+.dashboard-content{
+    min-height: 80vh;
+}
+.dashboard-content > .collapse{
+    height: 100%;
+}
+.dashboard-content > .collapse ul.nav  li:hover{
+    background: #e0e0e0;
+}
+.tab-content{
+    width: 100%;
+    height: 100%;
+}
+.jcarousel {
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.jcarousel-inner {
+    width: 10000em;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    
+    gap: 12px;
+    grid-auto-flow: column;
+    grid-template-rows: 300px;
+    
+}
+@media (min-width: 768px){
+    .jcarousel-inner{
+    grid-auto-columns: minmax(calc(80vw  / 5) ,calc(80vw / 5));
+    }
+}
+@media (min-width: 568px) and (max-width: 768px) {
+    .jcarousel-inner{
+    grid-auto-columns: minmax(calc(80vw  / 4) ,calc(80vw / 4));
+    }
+}
+@media (min-width: 368px) and (max-width: 568px) {
+    .jcarousel-inner{
+    grid-auto-columns: minmax(calc(80vw  / 2) ,calc(80vw / 2));
+    }
+}
+@media (max-width: 368px){
+    .jcarousel-inner{
+        grid-auto-columns: minmax(80vw ,80vw);
+    }
+}
+.jcarousel-prev,.jcarousel-next{
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    
+}
+.jcarousel-prev{
+    left: 10px;
+}
+.jcarousel-next{
+    right: 10px;
+}
+.jcarousel-container{
+    
+    position: relative;
+    width: 100%;
+    height: 400px;
+  
+}
+
+.doctors-container{
+    height: 400px;
+}
+.doctors-container .card-img-top{
+    width: 100%;
+    height: 70%;
+}
+.doctors-container .card-img-top img{
+    width: 60%;
+    height: 50%;
+}
+.available-doctors-listview-container{
+    padding: 10px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(6,1fr);
+    grid-auto-rows: 300px;
+}
+.available-doctors-listview-container .card-img-top{
+    width: 100%;
+    height: 70%;
+}
+.available-doctors-listview-container .card-img-top img{
+    
+    width: 60%;
+    height: 60%;
+}
+.controls-container label{
+    min-width: 92px;
+}

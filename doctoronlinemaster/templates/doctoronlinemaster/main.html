@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block maintitle %}Home{% endblock maintitle%}</title>
+    {% block mainstyles %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/bootstrap-5/css/bootstrap.min.css' %}">
+    {% load static %}
+    <link rel="icon" type="image/png" href="{% static '/Images/ccloud.png' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/fontawesome/css/all.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/doctoronlinemaster/main.css' %}">
+    {% load static %}
+    <script src="{% static '/doctoronlinemaster/popper.js' %}"></script>
+    {% load static %}
+    <script src="{% static '/bootstrap-5/js/bootstrap.min.js' %}"></script>
+    {% endblock mainstyles%}
+
+    {% block otherstyles %}
+    {% endblock otherstyles %}
+   
+</head>
+<body class="position-relative">
+    {% block all %}
+    {% block mainnav %}
+    <div class="container-fluid m-0 p-0">
+        <div class="social-media-top d-flex justify-content-end align-items-center bg-light">
+            <i class="fab fa-facebook p-2 mx-1"></i>
+            <i class="fab fa-twitter p-2 mx-1"></i>
+            <i class="fab fa-instagram p-2 mx-1"></i>
+            <i class="fab fa-whatsapp p-2 mx-1"></i>
+            <i class="fab fa-linkedin p-2 mx-1"></i>
+        </div>
+        <nav class="navbar navbar-light  navbar-expand-md bg-light flex-column main-nav">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <img src="{% static '/Images/doctoronline.svg' %}" alt="" class="" width="64">
+                    <span>Doctor Online</span>
+                </a>
+            <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav-collapse">
+                <span class="fas fa-bars text-light"></span>
+            </button>
+                <div class="collapse navbar-collapse " id="main-nav-collapse">
+                        <ul class="navbar-nav align-items-start align-items-sm--center w-100">
+                            <li class="nav-item "><a href="{% url 'doctoronlinemaster:home'%}" class="nav-link text-light">Home</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link text-light">Services</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link text-light">About Us</a></li>
+                            <li class="ms-0 ms-md-auto my-2 my-md-0 mx-2 nav-item  btn btn-outline-primary signup-btn border-2 border-primary">
+                                <a href="{% url 'doctoronlinemaster:signup' %}" class="nav-link text-light">Sign Up</a>
+                            </li>
+                            <li class="nav-item btn btn-sm btn-primary login-btn rounded">
+                                <a href="{% url 'doctoronlinemaster:login' %}" class="nav-link text-light">LogIn</a>
+                            </li>
+                        </ul>
+                </div>
+            </div>
+            {% block mainslider%}
+             <div class="main-slider position-relative d-flex flex-column flex-sm-row ">
+                   <div class="main-slider-left d-flex flex-column flex-grow-1">
+                       <div class="p-4">
+                           <span class="lead text-white">
+                               Access Medical Services Easily with our New Paltform.
+                               
+                           </span>
+                       </div>
+                    <a href="{% url 'doctoronlinemaster:signup'%}" role="button" class="btn btn-lg getstarted-btn">Get Started Here<i class="fas fa-chevron-right"></i></a>
+                   </div>
+                   <div class="main-slider-right p-2">
+                       <div class="carousel slide" data-bs-ride="carousel" id="main-slider-carousel">
+                           <div class="carousel-inner position-relative">
+                                 {% for sliderImg in mainsliderimages %}
+                                 {% if forloop.counter0 == 0%}
+                                 <div class="carousel-item  active position-relative">
+                                    <div class="carousel-img-container"><img src="{{sliderImg.image.url}}" alt=""></div>
+                                </div>
+                                 {% else %}
+                                 <div class="carousel-item position-relative">
+                                    <div class="carousel-img-container"><img src="{{sliderImg.image.url}}" alt=""></div>
+                                </div>
+                                 {% endif %}
+                                 {% endfor %}
+                               
+                            </div>
+                            <button class="carousel-control-prev bg-success top-50 rounded-pill" style="width: 40px !important;height: 40px !important;margin-left: 5px; z-index: 1000;" type="button" data-bs-target="#main-slider-carousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" arial-hidden=true ></span>
+                            </button>
+                            <button class="carousel-control-next bg-success top-50 rounded-pill" type="button" style="width: 40px !important;height: 40px !important;margin-left: 5px;z-index: 1000;" data-bs-target="#main-slider-carousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                           </div>
+                       </div>
+                   </div>
+                
+             </div>
+             {% endblock mainslider%}
+        </nav>
+       
+        
+    </div>
+    {% endblock mainnav%}
+    <!--end of main navigation-->
+    <!--start of main-->
+    {% block maincontent %}
+    <div class="container-fluid p-0">
+        <div class="about-us border m-2 border-1 border-light rounded shadow-sm">
+        <a href="" id="about-us" class="visually-hidden"></a>
+        <h4 class="">About Us</h4>
+        <p class="lead text-muted py-3">
+           {{about.description}}
+        </p>
+        </div>
+        <div class="our-services ">
+                <div class="our-doctors d-flex flex-column py-4">
+                    <div class="border-top border-dark border-4  mx-4 py-3"></div>
+                    <div class="d-flex align-items-center px-3">
+                        <h4>Our Doctors</h4>
+                        <Span class="ms-2">Seall All <i class="fas fa-chevron-right"></i></Span>
+                        <div class="d-flex ms-auto me-5">
+                            <i class="fas fa-chevron-left"></i>
+                            <i class="fas fa-chevron-right ms-2"></i>
+                        </div>
+                    </div>
+                    <!--start of our doctors-->
+                    <div class="our-doctors-content align-self-center py-5">
+                           <div class="d-flex flex-column shadow-lg bg-white rounded">
+                               <div class="doctor-img-container flex-fill">
+                                   <img src="{% static 'Images/Doctors/dr3.jpg' %}" alt="" class="img img-fluid">
+                                </div>
+                                <div class="doctor-content p-2 flex-fill text-bottom">
+                                    <span class="text-muted">Group Photo of Our doctors after a long Day of Work</span>
+                                </div>
+                           </div>
+                           <div class="d-flex flex-column  border-light shadow-lg bg-white rounded">
+                               <div class="doctor-img-container flex-fill">
+                                   <img src="{% static 'Images/Doctors/dr4.jpg' %}" alt="" class="img img-fluid">
+                                </div>
+                                <div class="doctor-content p-2 flex-fill">
+                                    <span class="text-muted">Our Doctors During their Daily Routines With a Patient</span>
+                                </div>
+                           </div>
+                           <div class="d-flex flex-column shadow-lg border-light bg-white rounded">
+                               <div class="doctor-img-container flex-fill">
+                                   <img src="{% static 'Images/Doctors/dr5.jpg' %}" alt="" class="img img-fluid">
+                                </div>
+                                <div class="doctor-content p-2 flex-fill">
+                                    <span class="text-muted">Group Photo of Our doctors after a long Day of Work</span>
+                                </div>
+                           </div>
+                           <div class="d-flex flex-column shadow-lg border-light border border-light border-1 border-1 bg-white rounded">
+                               <div class="doctor-img-container flex-fill">
+                                   <img src="{% static 'Images/Doctors/dr6.jpg' %}" alt="" class="img img-fluid">
+                                </div>
+                                <div class="doctor-content p-2 flex-fill">
+                                    <span class="text-muted">One of Our Doctors with a patient whom had to consult the Doctor Physically</span>
+                                </div>
+                           </div>
+                    </div>
+                </div>
+                <!--end of our doctors-->
+                <!--start of advertisements-->
+                  <div class=" adverisements container-fluid  py-4">
+                       <div class="advertisements-container">
+                           <div class="advertisements-left d-flex flex-column justify-content-between align-items-center">
+                                 <p class="lead text-light py-3">
+                                     Your a Specialist in the medical Field this is a new Platform you can use to reach 
+                                     more people with ease. Register in Our platform to get connected with clients near you.
+                                 </p>
+                                 <a href="{% url 'doctoronlinemaster:signup'%}" role="button" class="btn btn-lg getstarted-btn">Get Started Here<i class="fas fa-chevron-right"></i></a>
+                           </div>
+                           <div class="adverisements-right">
+                               <div class="d-flex">
+                                   <h4 class="text-light">Newest Specialist</h4>
+                                   <i class="fas fa-chevron-left p-2 ms-auto text-light"></i>
+                                   <i class="fas fa-chevron-right p-2 me-2 text-light"></i>
+                               </div>
+                               <div class="carousel slide" data-bs-ride="carousel"style="overflow: hidden !important;height: 300px !important" >
+                                   <div class="carousel-inner w-100" style="overflow: hidden !important;">
+                                    {% for recentSpecialist in mainsliderimages %}
+                                        {% if forloop.counter0 == 0%}
+                                        <div class="carousel-item active w-100">
+                                            <img src="{{recentSpecialist.image.url}}" class="img img-fluid" style="object-fit: cover;width: 100%;height: 98% !important;"  alt="">
+                                        </div>
+                                        {% else %}
+                                        <div class="carousel-item w-100">
+                                            <img src="{{recentSpecialist.image.url}}" class="img img-fluid" style="object-fit: cover;width: 100%;height: 98% !important;"  alt="">
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                     
+                                   </div>
+                               </div>
+                           </div>
+                           </div>
+                       </div>  
+                  </div>
+                <!--end of advertisements-->
+                <!--start of customer testimonials-->
+                <div class="customer-testimonials p-4">
+                    <h4 class="text-muted border-top border-3 border-light py-3">Testimonials</h4>
+                    <div class="container-fluid customer-testimonials-container">
+                        <div class="customer-testimonials-left">
+                            <div class="card bg-white border border-1  rounded shadow-sm mb-4">
+                                <div class="card-header bg-white rounded-pill" style="height: 60px;">
+                                    <img src="{% static 'Images/Doctors/dr2.jpg' %}" width="24" height="24"  class="rounded-pill" alt="" style="object-fit: cover;" >
+                                    <span>Alex </span>
+                                </div>
+                                <div class="card-body">
+                                    <span>Their Services are amazing.</span>
+                                </div>
+                            </div>
+                            <div class="card bg-white border border-1  rounded shadow-sm mb-4">
+                                <div class="card-header bg-white rounded-pill" style="height: 60px;">
+                                    <img src="{% static 'Images/Doctors/dr3.jpg' %}" width="24" height="24"  class="rounded-pill" alt="" style="object-fit: cover;" >
+                                    <span>Boniface </span>
+                                </div>
+                                <div class="card-body">
+                                    <span>Their respond too fast.</span>
+                                </div>
+                            </div>
+                            <div class="card bg-white  border border-1  shadow-sm mb-4 ">
+                                <div class="card-header bg-white  rounded-pill" style="height: 60px;">
+                                    <img src="{% static 'Images/Doctors/dr4.jpg' %}" width="24" height="24"  class="rounded-pill" alt="" style="object-fit: cover;" >
+                                    <span>Victor</span>
+                                </div>
+                                <div class="card-body">
+                                    <span>They are the best.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="customer-testimonials-center">
+                            <div class="progress one" style="height: 2px;">
+                                <div class="progress-bar bg-success w-100" role="progressbar" arial-valuenow="25" arial-valuemax="100" arial-valuemin="0" ></div>
+                            </div>
+                            <div class="progress five" style="height: 2px;">
+                                <div class="progress-bar bg-success w-100" role="progressbar" arial-valuenow="25" arial-valuemax="100" arial-valuemin="0" ></div>
+                            </div>
+                            <div class="progress three" style="height: 2px;">
+                                <div class="progress-bar bg-success w-100" role="progressbar" arial-valuenow="25" arial-valuemax="100" arial-valuemin="0" ></div>
+                            </div>
+                            <div class="progress bg-white" style="width: 100%;justify-content: center;">
+                                <div class="progress-bar bg-success" role="progressbar" arial-valuenow="25" arial-valuemax="100" arial-valuemin="0" style="width: 1px !important; height: 100% !important;" ></div>
+                            </div>
+                            <div class="progress six" style="height: 2px;">
+                                <div class="progress-bar bg-success w-100" role="progressbar" arial-valuenow="25" arial-valuemax="100" arial-valuemin="0" ></div>
+                            </div>
+                            <div class="progress two" style="height: 2px;">
+                                <div class="progress-bar bg-success w-100" role="progressbar" arial-valuenow="25" arial-valuemax="100" arial-valuemin="0" ></div>
+                            </div>
+                            <div class="progress seven" style="height: 2px;">
+                                <div class="progress-bar bg-success w-100" role="progressbar" arial-valuenow="25" arial-valuemax="100" arial-valuemin="0" ></div>
+                            </div>
+                        </div>
+                        <div class="customer-testimonials-right">
+                            <div class="card bg-white border border-1 rounded shadow-sm mb-4">
+                                <div class="card-header bg-white  rounded-pill" style="height: 60px;">
+                                    <img src="{% static 'Images/Doctors/dr2.jpg' %}" width="24" height="24"  class="rounded-pill" alt="" style="object-fit: cover;" >
+                                    <span>Alex </span>
+                                </div>
+                                <div class="card-body">
+                                    <span>Their Services are amazing.</span>
+                                </div>
+                            </div>
+                            <div class="card bg-white border border-1  rounded shadow-sm mb-4">
+                                <div class="card-header bg-white  rounded-pill" style="height: 60px;">
+                                    <img src="{% static 'Images/Doctors/dr3.jpg' %}" width="24" height="24"  class="rounded-pill" alt="" style="object-fit: cover;" >
+                                    <span>Boniface </span>
+                                </div>
+                                <div class="card-body">
+                                    <span>Their respond too fast.</span>
+                                </div>
+                            </div>
+                            <div class="card bg-white border-1 border-light rounded shadow-sm mb-4">
+                                <div class="card-header bg-white rounded-pill" style="height: 60px;">
+                                    <img src="{% static 'Images/Doctors/dr4.jpg' %}" width="24" height="24"  class="rounded-pill" alt="" style="object-fit: cover;" >
+                                    <span>Victor</span>
+                                </div>
+                                <div class="card-body">
+                                    <span>They are the best.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--End of customer testimonials-->
+                <div class="our-partriners py-4" style="background-color: whitesmoke;">
+                    <h5 class="text-end me-4">Partiners</h5>
+                    <div class="container-fluid our-partriners-container py-4" >
+                        {% for partiner in partiners %}
+                        <div class="partiner-content rounded border border-1 border-light shadow-lg p-3">
+                            <div class="partiner-img-container">
+                                <img src="{{partiner.image.url}}" alt="">
+                            </div>
+                            <div class="partiner-body">
+                                <span>{{partiner.name}}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                           
+                    </div>
+                </div>
+        </div>
+    </div>
+    {% endblock maincontent %}
+    <!--end of main-->
+    <!--main -footer-->
+    {% block mainfooter %}
+    <footer class=" main-footer  py-5 px-3">
+        
+      <div class="footer-container bg-white d-grid">
+        <div class="footer-left">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="#" class="nav-link text-dark">Home</a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Services</a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">About Us</a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Get In Touch</a></li>
+            </ul>
+        </div>
+        <div class="footer-center">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="#" class="nav-link text-dark">Phone: +25412345678 </a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Help</a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Testimonials</a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Subscribe to Our News Letter</a></li>
+            </ul>
+        </div>
+        <div class="footer-right">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="#" class="nav-link text-dark">Facebook <i class="fab fa-facebook"></i></a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Twitter <i class="fab fa-twitter"></i></a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Instagram <i class="fab fa-instagram"></i></a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Whatsapp <i class="fab fa-whatsapp"></i></a></li>
+                <li class="nav-item"><a href="" class="nav-link text-dark">Linkedin <i class="fab fa-linkedin"></i></a></li>
+            </ul>
+        </div>
+      </div>
+    </footer>
+    {% endblock mainfooter %}
+    <!--end of main-footer-->
+    {% block mainjs %}
+    {% endblock mainjs %}
+    {% block otherjs %}
+    {% endblock otherjs%}
+
+    {% endblock all %}
+</body>
+</html>

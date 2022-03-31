@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/bootstrap-5/css/bootstrap.min.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/fontawesome/css/all.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/doctoronlinemaster/login.css' %}">
+    {% load static %}
+    <script src="{% static '/doctoronlinemaster/popper.js' %}"></script>
+    {% load static %}
+    <script src="{% static '/bootstrap-5/js/bootstrap.min.js' %}"></script>
+
+</head>
+<body>
+    <div class="container-fluid main-login-container h-100">
+        <div class="login-container row align-items-center h-100 px-2">
+                <div class="login-details col h-100 d-flex align-items-center">
+                    <form action="{% url 'doctoronlinemaster:enterpassword' %}" class="d-flex bg-white h-75 w-100 p-2 flex-column rounded" method="POST">
+                        {% csrf_token %}
+                        <div class="input-container d-flex flex-column flex-md-row align-items-center mt-5">
+                            <label for="" class="form-label fs-5">Email</label>
+                            <input type="text" class="form-control p-2 m-2" placeholder="example@gmail.com">
+                        </div>
+                       <button class="btn btn-sm btn-primary mt-auto align-self-end" type="submit" style="width: max-content;">Next <i class="fas fa-chevron-right"></i></button>
+                    </form>
+                </div>
+                <div class="login-container-right d-none d-sm-flex flex-column col h-75 p-5  text-light">
+                      <p class="lead" style="font-size: large">
+                          Online Platform That Gives You Access to wide range of Medical Services
+                           And Emergency Response Services anywhere.
+                      </p>
+                      <p class="lead" style="font-size: 1.5em;">
+                          You are a medial Institution and wish to reach more People This is the best Platform in the 
+                          Market where you can reach greater Audience.
+                      </p>
+                      <button class="btn btn-lg btn-outline-primary mt-auto">Get Started <i class="fas fa-chevron-right"></i></button>
+                </div>
+        </div>
+    </div>
+</body>
+</html>

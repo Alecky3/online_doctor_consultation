@@ -1,0 +1,1416 @@
+    {% extends 'doctoronlinemaster/main.html'%}
+
+    {% block maintitle %}
+       dashboard
+    {% endblock maintitle%}
+
+    {% block mainstyles%}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap-5/css/bootstrap.min.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/doctoronlinemaster/userdashboard.css' %}">
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/popper.js' %}"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'doctoronlinemaster/dataTables.jqueryui.min.css' %}">
+    {% load static %}
+    <script src="{% static 'bootstrap-5/js/bootstrap.min.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jquery-3.5.1.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jquery.jcarousel.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jquery.dataTables.min.js' %}"></script>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/dataTables.jqueryui.min.js' %}"></script>
+    {% endblock mainstyles %}
+     
+
+    {% block all %}
+    <nav class="dashboard-nav navbar navbar-expand-md navbar-light bg-dark main-nav">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+                <img src="{% static 'Images/doctoronline.svg' %}" alt="" class="" width="64">
+                <span class="text-light">Doctor Online</span>
+            </a>
+        <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#userdashboardcollapse">
+            <span class="fas fa-bars text-light"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="userdashboardcollapse">
+            <ul class="navbar-nav w-100">
+                <li class="nav-item dropdown" id="specialistDropdown">
+                    <a href="#"  class="nav-link text-light dropdown-toggle"  data-bs-target="#specialistDropdownMenu" id="specialistDropdownMenutoggler" role="dropdown">Specialists</a>
+                    <ul class="dropdown-menu nav nav-tabs flex-column d-none" role="tablist" id="specialistDropdownMenu">
+                        <li class="p-2"><a href=""  class="dropdown-item" role="presentation" data-bs-toggle="tab" data-bs-target="#doctors">Doctors</a></li>
+                        <li class="p-2"><a href="" class="dropdown-item" role="presentation" data-bs-toggle="tab">Surgeons</a></li>
+                        <li class="p-2"><a href="" class="dropdown-item" role="presentation" data-bs-toggle="tab">Nurses</a></li>
+                        <li class="p-2"><a href="" class="dropdown-item" role="presentation" data-bs-toggle="tab">Clinical Officers</a></li>
+                        <li class="p-2"><a href="" class="dropdown-item" role="presentation" data-bs-toggle="tab">Specialists Secreataries</a></li>
+                        
+                    </ul>
+                </li>
+                <li class="nav-item " >
+                    <a href="#" class="nav-link text-light"  id="emergencyDropdownToggler">Emergency Services</a>
+                    
+                </li>
+                <li class="nav-item" ><a href="#" class="nav-link text-light">Home Care</a></li>
+                <li class="nav-item" ><a  href="#dashboard-collapse" role="button" data-bs-toggle="collapse" class="nav-link text-light">Dashboard</a></li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="position-relative">
+                <a class="p-2 me-2 btn text-decoration-none" data-bs-toggle="dropdown" data-bs-target="#navmaindropdown">
+                  <i class="fas fa-bars text-light"></i>
+                </a>
+                <ul class="dropdown-menu fade position-absolute nav nav-tabs" id="logoutdropdown" style="left: -50px !important;" role="tablist">
+                    <li class="nav-item d-flex align-items-center justify-content-center" role="presentation">
+                        <i class="fas fa-user"></i><a href="#" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#profile">Profile</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center justify-content-center" role="presentation">
+                        <i class="fas fa-power-off"></i><a href="{% url 'doctoronlinemaster:login'%}" class="nav-link">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+               <span class="text-light mx-2">Welcome</span>
+               <span class="rounded-pill bg-primary  text-light p-2 d-flex align-items-center justify-content-center" style="width:30px;height:30px;">B</span>
+               
+           </div>
+        </div>
+    </nav>
+   
+    <div class="main-conten-container d-flex" id="tabcontentContainer">
+        <div class="dashboard-content">
+            <div class=" bg-white collapse border border-light border-light" id="dashboard-collapse">
+                <ul class="nav  flex-column bg-white " role="tablist">
+                    <li class="nav-item"><a href="#homepane" class="nav-link text-dark" role="tab" data-bs-toggle="tab">Home</a></li>
+                    <li class="nav-item"><a href="#profile" class="nav-link text-dark" role="tab" data-bs-toggle="tab">Profile</a></li>
+                    <li class="nav-item"><a href="#appointments" class="nav-link text-dark" role="tab" data-bs-toggle="tab">Appointments</a></li>
+                    <li class="nav-item"><a href="#ambulances" class="nav-link text-dark" role="tab" data-bs-toggle="tab">Emergency Services</a></li>
+                    <li class="nav-item"><a href="#homecare" class="nav-link text-dark" role="tab" data-bs-toggle="tab">Home Care</a></li>
+                    <li class="nav-item"><a href="#messages" class="nav-link text-dark" role="tab" data-bs-toggle="tab">Messages</a></li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="tabs-content tab-content h-100" >
+         <div class="tab-pane fade show active" role="tabpanel" id="homepane">
+             {% for specialization,userspecialists in specialists.items%}
+             <div class="tab-content h-100">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item"><a href="#available{{specialization}}" class="nav-link active" role="tab" data-bs-toggle="tab"><i class="fas fa-arrow-circle-left"></i></a></li>
+                     <li class="nav-item"><a href="#available{{specialization}}-listview" role="tab" data-bs-toggle="tab" class="nav-link"><i class="fas fa-th"></i></a></li>
+                 </ul>
+                <div class="container-fluid position-relative tab-pane fade show active" role="tabpanel" id="available{{specialization}}">
+                    <a href="#" class=" text-decoration-none jcarousel-prev bg-success rounded-pill p-2 d-flex align-items-center justify-content-center"><i class="fas fa-chevron-left text-light"></i></a>
+                    <a href="#" class=" text-decoration-none jcarousel-next bg-success rounded-pill p-2 d-flex align-items-center justify-content-center"><i class="fas fa-chevron-right text-light"></i></a>
+                <div class="conatiner-header d-flex align-items-center p-2">
+                    <h5>Available {{specialization}}{{userspecialists|pluralize}}</h5>
+                </div>
+                   <div class="doctors-container d-flex justify-content align-items-center">
+                    <div class="jcarousel">
+                        <div class="jcarousel-inner">
+                            {% for s in userspecialists%}
+                            <div class="card border border-light border-1" >
+                                <div class="card-img-top d-flex justify-content-center align-items-center"><img src="{{s.profile_photo.url}}" class="rounded-pill" alt=""></div>
+                                <div class="card-body">
+                                    <div class="d-flex "><span>{% if s.availability %}Available {% else %} Not Available {% endif %}</span></div>
+                                    <div class="d-flex align-items-center"><i class="fas fa-bullseye text-danger me-2"></i> <span>{% if s.online %}Online {% else %} Not Online {% endif %}</span></div>
+                                    <a href="#" class="card-link text-decoration-none specialist-view-details" data-id="{{s.pk}}" data-email="{{user.email}}">View Details</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <!--Available doctors List View-->
+            <div class="tab-pane" role="tabpanel" id="available{{specialization}}-listview">
+                <h4 class="px-4 py-3">All {{specialization}}</h4>
+                <div class="Container-fluid">
+                    <div class="available-doctors-listview-container">
+                        {% for s in userspecialists %}
+                        <div class="card border border-light border-1">
+                            <div class="card-img-top d-flex justify-content-center align-items-center"><img src="{{s.profile_photo.url}}" class="rounded-pill" alt=""></div>
+                            <div class="card-body">
+                                <div class="d-flex "><span>{% if s.availability %}Available {% else %} Not Available {% endif %}</span></div>
+                                <div class="d-flex align-items-center"><i class="fas fa-bullseye text-danger me-2"></i> <span>{% if s.online %}Online {% else %} Not Online {% endif %}</span></div>
+                                <a href="#" class="card-link text-decoration-none specialist-view-details" data-id="{{s.pk}}"  data-email="{{user.email}}">View Details</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            </div>
+             {% endfor %}
+            <!--alert-->
+            <!-- <div class="alert alert-light border border-light border-1 shadow-lg position-absolute d-none top-25 p-0 start-25 w-50 alert-dismissible fade show" role="alert" style="z-index: 1000;">
+                <button class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="alert"></button>
+                 <div class="video-container p-2 d-flex bg-dark" style="width: 100%;">
+                        <video src="" id="appointment_video" autoplay controls style="width: 70% !important;">
+
+                        </video>
+                        <div class="video-right p-2 bg-light">
+                            <span>Specialist</span>
+                            <span class="d-block">Alex Muthini</span>
+                            <span class="lead">Time Remaining</span>
+                            <span>45:00</span>
+                        </div>
+                 </div>
+                 <div class="video-details d-flex p-2 bg-light border-top border-black border-2">
+                     <button class="btn btn-lg btn-primary mx-2 p-2" id="start_video">Video</button>
+                     <button class="btn btn-lg btn-primary mx-2 p-2" id="capture_screen">Capture Screen</button>
+                     <button class="btn btn-lg btn-danger mx-2 p-2 ms-auto" id="stop">Stop</button>
+                     <button class="btn btn-lg btn-info mx-2 p-2" id="record">Record</button>
+                 </div>
+            </div> -->
+            <!--end of alert-->
+            <div class="tab-content h-100">
+               <ul class="nav nav-tabs">
+                   <li class="nav-item"><a href="#availableambulances" class="nav-link active" role="tab" data-bs-toggle="tab"><i class="fas fa-arrow-circle-left"></i></a></li>
+                    <li class="nav-item"><a href="#availableambulances-listview" role="tab" data-bs-toggle="tab" class="nav-link"><i class="fas fa-th"></i></a></li>
+                </ul>
+               <div class="container-fluid position-relative tab-pane fade show active" role="tabpanel" id="availableambulances">
+                   <a href="#" class=" text-decoration-none jcarousel-prev bg-success rounded-pill p-2 d-flex align-items-center justify-content-center"><i class="fas fa-chevron-left text-light"></i></a>
+                   <a href="#" class=" text-decoration-none jcarousel-next bg-success rounded-pill p-2 d-flex align-items-center justify-content-center"><i class="fas fa-chevron-right text-light"></i></a>
+               <div class="conatiner-header d-flex align-items-center p-2">
+                   <h5>Available Ambulances</h5>
+               </div>
+                  <div class="doctors-container d-flex justify-content align-items-center">
+                   <div class="jcarousel">
+                       <div class="jcarousel-inner">
+                           {% for a in ambulances%}
+                           <div class="card border border-light border-1" >
+                               <div class="card-img-top d-flex justify-content-center align-items-center"><img src="{{a.image.url}}" class="rounded-pill" alt=""></div>
+                               <div class="card-body">
+                                   <div class="d-flex "><span>{% if a.available %}Available {% else %} Not Available {% endif %}</span></div>
+                                   <a href="#" class="card-link text-decoration-none ambulance-view-details" data-id="{{a.pk}}" data-user="{{user.pk}}">View Details</a>
+                               </div>
+                           </div>
+                           {% endfor %}
+                       </div>
+                   </div>
+               </div>
+               </div>
+               <!--Available ambulances listview-->
+           <div class="tab-pane" role="tabpanel" id="availableambulances-listview">
+               <h4 class="px-4 py-3">All Ambulances</h4>
+               <div class="Container-fluid">
+                   <div class="available-doctors-listview-container">
+                       {% for a in ambulances %}
+                       <div class="card border border-light border-1">
+                           <div class="card-img-top d-flex justify-content-center align-items-center"><img src="{{a.image.url}}" class="rounded-pill" alt=""></div>
+                           <div class="card-body">
+                               <div class="d-flex "><span>{% if a.available %}Available {% else %} Not Available {% endif %}</span></div>
+                               <a href="#" class="card-link text-decoration-none ambulance-view-details" data-id="{{a.pk}}" data-user="{{user.pk}}">View Details</a>
+                           </div>
+                       </div>
+                       {% endfor %}
+
+                   </div>
+               </div>
+           </div>
+           </div>
+           <!--end of ambulances-->
+         </div>
+         <!-- <div class="tab-pane fade" id="ambulances"  role="tabpanel">Ambulances Pane</div>
+         <div class="tab-pane fade" id="doctors"  role="tabpanel">Doctors Pane</div> -->
+         <div class="tab-pane fade h-100" id="profile"  role="tabpanel">
+            <h3 class="lead p-3 my-2 border-bottom border-light border-2">Your Profile Details</h3>
+             <div class="container-fluid d-flex  justify-content-center align-items-center py-4 h-100">
+                 
+                 <form action="" class="d-flex flex-column p-3  w-100 mt-5">
+                     <div class="profile-image-main d-flex flex-column-reverse flex-sm-row justify-content-between border border-light border-2 rounded">
+                          <div class="d-flex flex-column p-2">
+                              <label for="profile_image" class="form-label p-2 m-2 lead">Your Profile Photo</label>
+                              <input type="file" name="profile_image" id="profile_image" class="form-control m-2">
+                          </div>
+                          <div class="profile-img-container p-2 m-2 rounded-pill border border-light border-2" style="max-width:300px;max-height: 280px;">
+                             <img src="../Images/Doctors/dr1.jpg" style="width: 100%;height: 100%;" id="profile_img" class="rounded-pill" alt="">
+                          </div>
+                     </div>
+                     <div class="d-flex flex-column flex-sm-row my-3 border border-light border-2 rounded">
+                        <div class="controls-container d-flex flex-column flex-md-row my-3 flex-fill">
+                            <label for="" class="form-label p-2 m-2 text-nowrap">First Name</label>
+                            <input type="text" class="form-control p-2 flex-grow-1" placeholder="First Name">
+                        </div>
+                        <div class="controls-container d-flex flex-column flex-md-row my-3 flex-fill">
+                           <label for="" class="form-label p-2 m-2 text-nowrap">Last Name</label>
+                           <input type="text" class="form-control p-2 flex-grow-1" placeholder="Last Name">
+                       </div>
+                     </div>
+                     <div class="d-flex flex-column flex-sm-row my-2 border border-light border-2 rounded">
+                        <div class="controls-container d-flex flex-column flex-md-row my-3 flex-fill">
+                            <label for="" class="form-label p-2 m-2 text-nowrap">Email</label>
+                            <input type="text" class="form-control p-2 flex-grow-1" placeholder="Your Email">
+                        </div>
+                        <div class="controls-container d-flex flex-column flex-md-row my-3 flex-fill">
+                            <label for="" class="form-label p-2 m-2 text-nowrap flex-grow-1">Phone</label>
+                            <input type="text" class="form-control p-2" placeholder="Phone">
+                        </div>
+                     </div>
+                     
+                    
+                    <button class=" btn btn-sm btn-primary p-2 align-self-end">Submit</button>
+                 </form>
+             </div>
+         </div>
+         <div class="tab-pane fade" id="messages"  role="tabpanel">
+             <div class="container-fluid py-2 px-4" id="messages-container">
+                 {% for m in messages %}
+                 <div class="alert alert-light border border-light border-1 shadow-lg">
+                    <div class="message-container d-flex flex-column">
+                        <div class="message-header d-flex">
+                            <span class="p-2 m-2">{{m.type}}</span>
+                            <span class="p-2 m-2">{{m.datePosted}}</span>
+                            <button class="btn btn-sm btn-danger ms-auto my-2 delete-msg-btn" data-id="{{m.pk}}">Delete</button>
+                        </div>
+                        <div class="message-body">
+                            <span>{{m.message}}</span>
+                        </div>
+                    </div>
+                </div>
+                 {% endfor %}
+                 
+             </div>
+         </div>
+         <!--start of appointments-->
+         <div class="tab-pane fade position-relative" id="appointments"  role="tabpanel">
+            <div class="alert alert-light border border-light border-1 shadow-lg position-fixed d-none  start-25 fade show" id="appointment-video-alert"  style="z-index: 1000;width: 600px;height: 400px;">
+                <button class="btn-close bg-danger text-light position-absolute top-0 end-0 m-2" id="appointment-video-alert-btn" ></button>
+                 <div class="video-container p-2 d-flex bg-dark" style="width: 100%;height: 80% !important;">
+                        <video src="" id="appointment_video" autoplay controls style="width: 70% !important;">
+
+                        </video>
+                        <div class="video-right p-2 bg-light" style="width: 28%;">
+                            <span>Specialist</span>
+                            <span class="d-block">Alex Muthini</span>
+                            <span class="lead">Time Remaining</span>
+                            <span>45:00</span>
+                        </div>
+                 </div>
+                 <div class="video-details d-flex p-2 bg-light border-top border-black border-2">
+                     <button class="btn btn-lg btn-primary mx-2 p-2" id="start_video">Video</button>
+                     <button class="btn btn-lg btn-primary mx-2 p-2" id="capture_screen">Capture Screen</button>
+                     <button class="btn btn-lg btn-danger mx-2 p-2 ms-auto" id="stop">Stop</button>
+                     <button class="btn btn-lg btn-info mx-2 p-2" id="record">Record</button>
+                 </div>
+            </div>
+             <div class="active-apointments container-fluid">
+                 <h4 class="py-2 p-2">Active Appointments</h4>
+                 <div class="container-fluid border border-light border-1">
+                    {% if activeappointments.count > 0%}
+                       <table class="display w-100" id="active_appointnments_table">
+                           <thead>
+                               <tr>
+                                   <td>Appointment Type</td>
+                                   <td>Appointment Time</td>
+                                   <td>Doctor</td>
+                                   <td>Edit</td>
+                               </tr>
+                           </thead>
+                           <tbody id="active_appointnments">
+                               {% for ap in activeappointments%}
+                               <tr>
+                                         
+                                <td>{{ap.typeOfAppointment}}</td>
+                                <td>{{ap.start_time}} - {{ap.end_time}}</td>
+                                <td>{{ap.specialist}}</td>
+                                <td class="d-flex flex-column align-items-end">
+                                   <button class="btn btn-sm btn-info my-2 appointment_view_btn" style="width: 64px;">View Details</button>
+                                   <button class="btn btn-sm btn-danger appointment_delete_btn" data-id="{{ap.pk}}" style="width: 64px;">Calcel</button>
+                               </td>
+                               </tr>
+                               {% endfor%}
+                               
+                           </tbody>
+                       </table>
+                       {% else %}
+                         <span class="lead fs-6">No Acive Appointments Available</span>
+                       {% endif %}
+                 </div>
+             </div>
+             <div class="container-fluid  my-2">
+                <h4 class="p-2 my-2">Previous Appointments</h4>
+                <div class="container-fluid">
+                    <div class="container-fluid border border-light border-1">
+                        {% if appointments.count > 0%}
+                        <table class="display w-100">
+                            
+                                <thead>
+                                    <tr>
+                                        <td>Appointment Type</td>
+                                        <td>Appointment Time</td>
+                                        <td>Doctor</td>
+                                        <td>Edit</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ap in appointments %}
+                                     <tr>
+                                         
+                                         <td>{{ap.typeOfAppointment}}</td>
+                                         <td>{{ap.start_time}} - {{ap.end_time}}</td>
+                                         <td>{{ap.specialist}}</td>
+                                         <td class="d-flex flex-column align-items-end">
+                                            <button class="btn btn-sm btn-danger appointment_delete_btn" data-id="{{ap.pk}}" style="width: 64px;">Delete</button>
+                                        </td>
+                                     </tr>
+                                    {% endfor %}
+                                   
+                                </tbody>
+                            </table>
+                            {% else %}
+                              <span class="lead fs-6">No previous Appointments Available</span>
+                            {% endif %}
+                        
+                  </div>
+                </div>
+            </div>
+         </div>
+             <!--End of appointments-->
+         <div class="tab-pane fade" id="ambulances"  role="tabpanel">
+            <div class="container-fluid  my-2">
+                <h4 class="p-2 my-2">Booked Ambulance</h4>
+                {% if activeambulanceorders.count > 0%}
+                <div class="container-fluid">
+                    <div class="container-fluid border border-light border-1">
+                        <table class="display w-100">
+                            
+                                <thead>
+                                    <tr>
+                                        <td>Name | Description</td>
+                                        <td>Location</td>
+                                        <td>Image</td>
+                                        <td>Time Booked</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in activeambulanceorders%}
+                                    <tr>
+                                     <td>{{a.ambulance.name}}</td>
+                                     <td>{{a.ambulance.location}}</td>
+                                     <td style="max-height: 200;max-width: 200;" class="p-2">
+                                        <img src="{{a.ambulance.image.url}}" style="width: 100%;height: 100%;" alt="">
+                                    </td>
+                                    <td>{{a.ambulance.date_ordered}}</td>
+                                     <td class="d-flex flex-column align-items-end">
+                                         <button class="btn btn-sm btn-info my-2" style="width: 64px;">view Details</button>
+                                         <button class="btn btn-sm btn-danger" style="width: 64px;">Calcel</button>
+                                     </td>
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                        
+                  </div>
+                </div>
+                {% else %}
+                  <div class="contauiner-fluid p-2 text-center">
+                      <span class="lead">No Current Booked Ambulance(s).</span>
+                  </div>
+                {% endif %}
+               </div>
+               <!--previous Ambulance Bookings-->
+               <div class="container-fluid  my-2">
+                <h4 class="p-2 my-2">Previously booked Ambulances</h4>
+                <div class="container-fluid">
+                    <div class="container-fluid border border-light border-1">
+                        <table class="display w-100">
+                            
+                                <thead>
+                                    <tr>
+                                        <td>Name | Description</td>
+                                        <td>Location</td>
+                                        <td>Image</td>
+                                        <td>Time Booked</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in ambulanceorders%}
+                                    <tr>
+                                        <td>{{a.ambulance.name}}</td>
+                                        <td>{{a.ambulance.location}}</td>
+                                        <td style="max-height: 200;max-width: 200;" class="p-2">
+                                           <img src="{{a.ambulance.image.url}}" style="width: 100%;height: 100%;" alt="">
+                                       </td>
+                                       <td>{{a.date_ordered}}</td>
+                                        <td class="d-flex flex-column align-items-end">
+                                            <button class="btn btn-sm btn-info my-2 view-ambulance-order-details" style="width: 64px;">view Details</button>
+                                            <button class="btn btn-sm btn-danger delete-ambulance-order" style="width: 64px;">Delete</button>
+                                        </td>
+                                       </tr>
+                                    {% endfor %}
+                                    
+                                    
+                                </tbody>
+                            </table>
+                        
+                  </div>
+                </div>
+               </div>
+               <!--End of previous ambulance bookings-->
+         </div>
+         <div class="tab-pane fade" id="clinicalofficers"  role="tabpanel">Clinica Officers</div>
+         <div class="tab-pane fade" id="homecare"  role="tabpanel">
+             <div class="container-fluid p-2">
+                
+                 <div class="assigned-specialists border-top border-light border-4">
+                     <div class="d-flex justify-content-between py-2">
+                        <h4 class="lead p-2 m-2">Your Assigned Homecare Specialists</h4>
+                        <button class="btn btn-success" id="homecare-enroll" style="height:fit-content !important;">Enroll</button>
+                     </div>
+                     {% if activehomecareservices.count > 0 %}
+                     {% for hs in activehomecareservices %}
+                     <div class="container-fluid p-2 my-2 d-flex flex-column flex-md-row justify-content-md-between border-bottom border-dark border-2">
+                         
+                         <div class="assigned-specialist-container">
+                             <div class="assigned-specialist-header my-2">
+                                 <div class="assigned-specialist-img-container rounded-pill p-2" style="max-width: 300px;max-height: 300px;">
+                                     <img src="{{hs.supervisor.profile_photo.url}}" style="width: 100%;height: 100%;" alt="">
+                                 </div>
+                             </div>
+                             <div class="assigned-specialist-details d-flex flex-column">
+                                <span class="assigned-specialist-name lead">Name <span>{{hs.supervisor.first_name}} {{hs.supervisor.last_name}}</span></span>
+                                <div class="d-flex flex-column p-2">
+                                    <span class="assigned-specialist-name lead">Specialization</span>
+                                    {% for sp in hs.supervisor.specialization.all %}
+                                    <p>{{sp.type}}</p>
+                                    {% endfor %}
+                                </div>
+                                <button class="btn btn-success btn-sm my-2">Specialist Details</button>
+                             </div>
+                         </div>
+                         <div class="current-homecare-details">
+                             <h4 class="lead p-2 m-2">Details</h4>
+                             <div class="d-flex flex-column p-2 m-2">
+                                 <div class="d-flex flex-column">
+                                     <span class="lead">Type of Service</span>
+                                     <span>{{hs.homecareservice.type}}</span>
+                                 </div>
+                                 <span class="lead">{{hs.start_date}}}<span>01/10/2021</span></span>
+                                 <span class="lead">{{hs.end_date}}<span>01/10/2021</span></span>
+                                 <button class="btn btn-success btn-sm my-2 mt-auto">View Details</button>
+                             </div>
+                         </div>
+                     </div>
+                     {% endfor %}
+                     {% else %}
+                     <div class="container-fluid p-5 border border-light rounded py-2 text-center">
+                         <span class="lead">No Active Homecare Service</span>
+                     </div>
+                     {% endif %}
+                     {% if allhomecareservices.count > 0 %}
+                    <div class="container-fluid border-top border-light border-3">
+                        <h5 class="lead py-3 m-2">Previous Homecare Services</h5>
+                         <div class="container-fluid">
+                              <table class="display w-100">
+                                  <thead>
+                                      <tr>
+                                          <td>Type</td>
+                                          <td>Specialist</td>
+                                          <td>Start Date</td>
+                                          <td>End Date</td>
+                                          <td></td>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      {% for hs in allhomecareservices%}
+                                      <tr>
+                                        <td>{{hs.homecareservice.type}}</td>
+                                        <td>{{hs.specialist.email}}</td>
+                                        <td>{{hs.start_date}}</td>
+                                        <td>{{hs.end_date}}</td>
+                                        <td><a href="#" class="text-decoration-none">View Details</a></td>
+                                    </tr>
+                                      {% endfor %}
+                                       
+                                  </tbody>
+
+                              </table>
+                         </div>
+                         {% else %}
+                         <div class="container-fluid p-5 my-5 border border-light rounded text-center">
+                              <span class="lead">Haven't enrolled to any previous homecare services</span>
+                         </div>
+                         {% endif %}
+                    </div>
+                 </div>
+             </div>
+         </div>
+        </div>
+    </div>
+    {% block otherjs%}
+    <script>
+        $(document).ready(function(){
+            $(function(){
+                $(".jcarousel").jcarousel()
+                
+                $(".jcarousel-prev").jcarouselControl({
+                    target:"-=1"
+                })
+                $(".jcarousel-next").jcarouselControl({
+                    target:"+=1"
+                })
+            })
+            //datatables
+            $("table").DataTable()
+             $("#previousappointmentstable").DataTable()
+
+            var viewDetailsBtns=document.querySelectorAll(".specialist-view-details")
+            viewDetailsBtns.forEach(btn=>{
+                btn.addEventListener('click',function(){
+                    event.preventDefault()
+                    console.log("clicked");
+                    var dataId=event.target.getAttribute("data-id")
+
+                    var Appointmentprice=0.00;
+                    var useremail=event.target.getAttribute("data-email")
+                    var appointmentType="";
+                    var appointmentId;
+                    var specialistData=null;
+                    $.ajax({
+                        url:"/doctoronline/getspecialist/",
+                        data: {"specialist_id":dataId}
+
+                    }).done(function(result){
+                        
+                        specialistData=result.specialistData;
+                         console.log(specialistData);
+                        //specialization
+                        var specialistSpecialization=Array.from(document.querySelectorAll(".specialistSpecialization"));
+                        var active_appointments=document.getElementById("active_appointments");
+
+                        var sName=document.querySelectorAll(".specialist_name");
+                        var sEmail=document.querySelectorAll(".specialist_email");
+                        var sPhone=document.querySelectorAll(".specialist_phone");
+                        var sCoutry=document.querySelectorAll(".specialist_country");
+                        var sCity=document.querySelectorAll(".specialist_city");
+                        var sAbout=document.getElementById("specialist_about");
+                        var typeofappointment=document.getElementById("typeof_appointment");
+                        var selectedAppointment=document.querySelectorAll(".selected_appointment")
+                        var appointmentPrice=document.querySelectorAll(".appointment_price");
+
+                        
+
+                        typeofappointment.addEventListener("change",function(){
+                               var newValue=this.value;
+                               var index=typeofappointment.selectedIndex
+                               var option=typeofappointment.children[index]
+                               var price=option.getAttribute("data-price")
+                               var id=option.getAttribute("data-id")
+                               
+                               appointmentPrice=price;
+                               appointmentType=newValue
+                               appointmentId=id
+                               appointmentPrice[0].innerText=price
+                               appointmentPrice[1].innerText=price
+                               selectedAppointment[0].innerText=newValue
+                               selectedAppointment[1].innerText=newValue
+                        })
+
+                        var specialistname=specialistData["first_name"]+" "+specialistData["last_name"]
+                        var specialistCountry=specialistData["country"]
+                        var specialistEmail=specialistData["email"]
+                        var specialistCity=specialistData["city"]
+                        var specialistPhone=specialistData["phone"]
+                        var specialistAbout=specialistData["about"]
+                        
+                        sName[0].innerText=specialistname;
+                        sName[1].innerText=specialistname;
+                        sName[2].innerText=specialistname;
+                        sName[3].innerText=specialistname;
+                        
+                        sEmail[0].innerText=specialistEmail;
+                        sEmail[1].innerText=specialistEmail;
+                        sEmail[2].innerText=specialistEmail;
+                        sEmail[3].innerText=specialistEmail;
+
+                        sPhone[0].innerText=specialistPhone;
+                        sPhone[1].innerText=specialistPhone;
+                        sPhone[2].innerText=specialistPhone;
+                        sPhone[3].innerText=specialistPhone;
+
+                        sCoutry[0].innerText=specialistCountry;
+                        sCoutry[1].innerText=specialistCountry;
+                        sCoutry[2].innerText=specialistCountry;
+                        sCoutry[3].innerText=specialistCountry;
+
+                        sCity[0].innerText=specialistCity;
+                        sCity[1].innerText=specialistCity;
+                        // sCity[2].innerText=specialistCity;
+                        // sCity[3].innerText=specialistCity;
+                        // sAbout.innerText=specialistAbout;
+
+                        var specialization=specialistData["specialization"]
+                       
+                        specialization.forEach(s=>{
+                            var li=document.createElement("li")
+                             li.innerText=s
+                             specialistSpecialization[0].appendChild(li)
+                             
+                            })
+                        specialistSpecialization[1].innerHTML=specialistSpecialization[0].innerHTML
+                        specialistSpecialization[2].innerHTML=specialistSpecialization[0].innerHTML
+                        specialistSpecialization[3].innerHTML=specialistSpecialization[0].innerHTML
+                        var appointments=specialistData["active_appointments"]
+                        if(appointments.length == 0){
+                            var li=document.createElement("li")
+                            li.innerText="No Active Appointments"
+                            active_appointments.appendChild(li)
+                        }else{
+                            appointments.forEach(a=>{
+                                var li=document.createElement("li")
+                                li.innerText=a
+                                active_appointments.appendChild(li)
+                            })
+                        }
+                        var typeof_appointment=specialistData["typeOfAppointment"]
+                        console.log(typeof_appointment);
+                        typeof_appointment.forEach(tp=>{
+                            var op=document.createElement("option")
+                            op.innerText=tp[0]
+                            op.setAttribute("data-price",tp[1])
+                            op.setAttribute("data-id",tp[2])
+                            typeofappointment.appendChild(op)
+
+                            selectedAppointment[0].innerText=typeofappointment.value
+                            selectedAppointment[1].innerText=typeofappointment.value
+
+                           
+
+                           
+                        })
+                        var index=typeofappointment.selectedIndex
+                        console.log("selected index");
+                        var option=typeofappointment.children[index]
+                        var price=option.getAttribute("data-price")
+                        var id=option.getAttribute("data-id")
+
+                        appointmentPrice[0].innerText=price
+                        appointmentPrice[1].innerText=price
+                        appointmentPrice=price
+                        appointmentId=id
+                        appointmentType=typeofappointment.value
+
+                        console.log("appointment Price: ",appointmentPrice," appopitmentType: ",appointmentType," specialistId: ",dataId," useremail: ",useremail)
+                        //end of specialization
+
+                        //make appointment
+                            var msgContainer=document.getElementById("messages-container");
+                            var activeappointnments=document.getElementById("active_appointnments");
+                            var makeappointmentalert=document.getElementById("makeappointmentalert");
+                            console.log("activeappointments: ",activeappointnments);
+                             var appointmentBtn=document.getElementById("submit_appointment");
+                             var submitSpinner=document.getElementById("submitappointment-spinner");
+                             appointmentBtn.addEventListener("click",function(){
+                                 $(submitSpinner).toggleClass("d-none")
+                                 event.target.setAttribute("disabled","true")
+                                function getCookie(name) {
+                                let cookieValue = null;
+                               if (document.cookie && document.cookie !== '') {
+                                      const cookies = document.cookie.split(';');
+                                      for (let i = 0; i < cookies.length; i++) {
+                                      const cookie = cookies[i].trim();
+                                      // Does this cookie string begin with the name we want?
+                                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                          break;
+                                       }
+                                       }
+                                      }
+                                      return cookieValue;
+                                      }
+                                  const csrftoken = getCookie('csrftoken');
+                                 $.ajax({
+                                     url:"/doctoronline/makeappointment/",
+                                     data:{
+                                         "specialist_id":dataId,
+                                         "appointment_price":appointmentPrice,
+                                         "appointment_type":appointmentType,
+                                         "appointment_id":appointmentId,
+                                         "patient_email":useremail
+                                     },
+                                     method: "POST",
+                                     headers:{
+                                         "X-CSRFToken":csrftoken
+                                     }
+                                 }).done(function(result){
+                                     console.log(result.success);
+                                     var data=null
+                                     data=result.data
+                                     console.log("data: ",data);
+                                     var msgId=data["message_id"]
+                                     var type=data["appointmentType"]
+                                     var datePosted=data["datePosted"]
+                                     var message=data["message"]
+                                     var apId=data["appointement_id"]
+                                     var email=data["specialist_email"]
+                                     var startTime=data["start_time"]
+                                     var endTime=data["end_time"]
+
+
+                                     console.log(msgId,type,datePosted,message);
+                                     $(makeappointmentalert).append(
+                                        `<div class="alert bg-success border border-light  text-light border-1 shadow-lg position-absolute" role="alert" data-bs-dismissible="true" style="top: 50%;left:0%;">
+                                          <button class="btn-close position-absolute top-0 end-0" role="alert" data-bs-dismiss="alert" >Delete</button>
+                                          <div class="message-container d-flex flex-column">
+                                           <div class="message-header d-flex">
+                                           <span class="p-2 m-2">Successfuly</span>
+                                           <span class="p-2 m-2">${datePosted}</span>
+                                
+                                           </div>
+                                           <div class="message-body">
+                                          <span class="text-decoration-underline">${message}</span>
+                                          </div>
+                                           </div>
+                                        </div>
+                                         `
+                                     )
+                                     setTimeout(function(){
+                                        var bootAlert=new bootstrap.Alert(makeappointmentalert)
+                                     bootAlert.close()
+                                     },4000)
+                                     $(msgContainer).append(
+                                         `<div class="alert alert-light border border-light border-1 shadow-lg">
+                                          <div class="message-container d-flex flex-column">
+                                           <div class="message-header d-flex">
+                                           <span class="p-2 m-2">${type}</span>
+                                           <span class="p-2 m-2">${datePosted}</span>
+                                            <button class="btn btn-sm btn-danger ms-auto my-2 delete-msg-btn" data-id="${msgId}">Delete</button>
+                                           </div>
+                                           <div class="message-body">
+                                          <span>${message}</span>
+                                          </div>
+                                           </div>
+                                        </div>
+                                         `
+                                     )
+                                     $(activeappointnments).append(
+                                         `<tr>
+                                         <td>${type}</td>
+                                         <td>${startTime} - ${endTime}</td>
+                                         <td>${email}</td>
+                                         <td class="d-flex flex-column align-items-end">
+                                            <button class="btn btn-sm btn-info my-2 appointment_view_btn" style="width: 64px;">View Details</button>
+                                            <button class="btn btn-sm btn-danger appointment_delete_btn" data-id="${appointmentId}" style="width: 64px;">Calcel</button>
+                                        </td>
+                                        </tr>
+                                         `
+                                     )
+                                     
+                                     var appointmentBtn=document.querySelectorAll(".appointment_delete_btn");
+                                     appointmentBtn.forEach(btn=>{
+                                         btn.removeEventListener("click",deleteAppointment)
+                                     })
+                                     appointmentBtn.forEach(btn=>{
+                                         btn.addEventListener("click",deleteAppointment)
+                                     })
+                                     var deleBtns=document.querySelectorAll(".delete-msg-btn")
+                                     deleBtns.forEach(btn=>{
+                                         btn.removeEventListener("click",deleteMessage)
+                                     })
+                                     deleBtns.forEach(btn=>{
+                                         btn.addEventListener("click",deleteMessage)
+                //                             var msgId=event.target.getAttribute("data-id")
+                //                              $(event.target).parent().parent().parent().remove()
+                //                               function getCookie(name) {
+                //                              let cookieValue = null;
+                //                                 if (document.cookie && document.cookie !== '') {
+                //                                   const cookies = document.cookie.split(';');
+                //                                for (let i = 0; i < cookies.length; i++) {
+                //                                const cookie = cookies[i].trim();
+                //                                // Does this cookie string begin with the name we want?
+                //                      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                //                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                //                           break;
+                //                        }
+                //                        }
+                //                       }
+                //                       return cookieValue;
+                //                       }
+                //                   const csrftoken = getCookie('csrftoken');
+                //  $.ajax({
+                //      url:"/doctoronline/deletepatientmessage/",
+                //      method:"POST",
+                //      data:{
+                //          "message_id":msgId
+                //      },
+                //      headers:{
+                //          "X-CSRFToken":csrftoken
+                //      }
+                //  }).done(function(response){
+                //      if(response.deleted===true){
+                         
+                //      }
+                //  }).fail(function(err){
+                //     console.log(err);
+                //  })
+                //                          })
+                                    })
+                                     
+                                 }).fail(function(err){
+                                    $(makeappointmentalert).append(
+                                        `<div class="alert bg-danger border border-light  text-light border-1 shadow-lg position-absolute" role="alert" data-bs-dismissible="true" style="top: 50%;left:0%;">
+                                          <button class="btn-close position-absolute top-0 end-0" role="alert" data-bs-dismiss="alert" >Delete</button>
+                                          <div class="message-container d-flex flex-column">
+                                           <div class="message-header d-flex">
+                                           <span class="p-2 m-2">Failed</span>
+                                           <span class="p-2 m-2">${Date.now()}</span>
+                                
+                                           </div>
+                                           <div class="message-body">
+                                          <span>Could not make the requested service try again later.</span>
+                                          </div>
+                                           </div>
+                                        </div>
+                                         `
+                                     )
+                                     setTimeout(function(){
+                                        var bootAlert=new bootstrap.Alert(makeappointmentalert)
+                                     bootAlert.close()
+                                     },4000)
+                                 });
+                             })
+                        //end make appointment
+                    }).fail(function(err){
+                        console.log(error);
+                    });
+                    var imgSrc=$(event.target).closest(".card").find("img").attr('src')
+                     var scrollY=window.scrollY
+                    var alert=document.createElement('div');
+                    alert.setAttribute("id","makeappointmentalert");
+                    alert.classList.add("alert" ,"alert-light", "border","border-light","border-1","shadow-lg","position-absolute","start-25","w-50","alert-dismissible","fade","show");
+                    alert.setAttribute("role","alert")
+                    alert.innerHTML=
+                    ` 
+                    <button class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="alert"></button>
+                <!--tab content-->
+                <div class="tab-content">
+                    <!--start of start page-->
+                <div class="tab-pane fade show active" role="tabpanel">
+                <div class="specialist alert-top d-flex justify-content-between flex-column-reverse flex-sm-row">
+                    <div class="personal-info d-flex flex-column">
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Name</Label><Span class="specialist_name"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Email</Label><Span class="specialist_email"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Phone</Label><Span class="specialist_phone"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Country</Label><Span class="specialist_country"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">City</Label><Span class="specialist_city"></Span></div>
+                          
+                           <div class="specialization p-2">
+                               <label for="">Specialization</label>
+                               <div>
+                                   <ul class="specialistSpecialization">
+                                       
+                                   </ul>
+                               </div>
+                           </div>
+                    </div>
+                    <div class="doctor-profile-img-container" style="max-width: 200px; max-height: 200px;">
+                        <img src="${imgSrc}"  class="rounded" alt="" style="width: 80%;height: 80%;">
+                    </div>
+                </div>
+                <div class="availability-container d-flex border-top border-success border-2 py-3">
+                        <div class="d-flex"><label for="">Availability: </label><span class="mx-2">Available</span></div>
+                        <div class="d-flex align-items-center"><i class="fas fa-bullseye mx-2 text-danger"></i><span>Online</span></div>
+                </div>
+                <div class="active-appointments">
+                    <span class="py-2">Active Appointments</span>
+                    <ul id="active_appointments">
+                        
+                    </ul>
+                </div>
+                <div class="description">
+                    <p class="lead" id="specialist_about">
+                       
+                    </p>
+                </div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#confirmpage">Make Appointment</button>
+                    </li>
+                </ul>
+                </div>
+                <!--end of start page-->
+                <!--start of confirm page-->
+                <div class="tab-pane fade" role="tabpanel" id="confirmpage">
+                <div class="specialist alert-top d-flex justify-content-between flex-column-reverse flex-sm-row">
+                    <div class="personal-info d-flex flex-column">
+                        <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Name</Label><Span class="specialist_name"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Email</Label><Span class="specialist_email"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Phone</Label><Span class="specialist_phone"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Country</Label><Span class="specialist_country"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">City</Label><Span class="specialist_city"></Span></div>
+                           <div class="specialization p-2">
+                               <label for="">Specialization</label>
+                               <div>
+                                   <ul  class="specialistSpecialization">
+                                      
+                                   </ul>
+                               </div>
+                           </div>
+                    </div>
+                    <div class="doctor-profile-img-container" style="max-width: 200px; max-height: 200px;">
+                        <img src="${imgSrc}"  class="rounded" alt="" style="width: 80%;height: 80%;">
+                    </div>
+                </div>
+                <div class="availability-container d-flex border-top border-success border-2 py-3">
+                        <div class="d-flex"><label for="">Availability: </label><span class="mx-2">Available</span></div>
+                        <div class="d-flex align-items-center"><i class="fas fa-bullseye mx-2 text-danger"></i><span>Online</span></div>
+                </div>
+                 <span class="py-2">Type of Appointment</span>
+                 <select name=""    class="form-select py-2 my-2" id="typeof_appointment">
+                   
+                </select>
+                <br class="my-2">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#appointment-details">Continue</button>
+                    </li>
+                </ul>
+                </div>
+                <!--end of confirm page-->
+                <!-- start of appointment description page-->
+                <div class="tab-pane fade" role="tabpanel" id="appointment-details">
+                    <div class="specialist alert-top d-flex justify-content-between flex-column-reverse flex-sm-row">
+                        <div class="personal-info d-flex flex-column">
+                            <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Name</Label><Span class="specialist_name"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Email</Label><Span class="specialist_email"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Phone</Label><Span class="specialist_phone"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Country</Label><Span class="specialist_country"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">City</Label><Span class="specialist_city"></Span></div>
+                               <div class="specialization p-2">
+                                   <label for="">Specialization</label>
+                                   <div>
+                                       <ul  class="specialistSpecialization">
+                                           
+                                       </ul>
+                                   </div>
+                               </div>
+                        </div>
+                        <div class="doctor-profile-img-container" style="max-width: 200px; max-height: 200px;">
+                            <img src="${imgSrc}"  class="rounded" alt="" style="width: 80%;height: 80%;">
+                        </div>
+                    </div>
+                    <div class="availability-container d-flex border-top border-success border-2 py-3">
+                            <div class="d-flex"><label for="">Availability: </label><span class="mx-2">Available</span></div>
+                            <div class="d-flex align-items-center"><i class="fas fa-bullseye mx-2 text-danger"></i><span>Online</span></div>
+                    </div>
+                     <div class="d-flex flex-column">
+                        <span class="py-2">Selected  Appointment</span>
+                        <span class="py-2 d-block bg-info shadow-sm"><i class="fas fa-check-circle text-light"></i><span class="selected_appointment"></span></span>
+                     </div>
+                     <div class="p-2">
+                         <p class="lead">
+                             This type of appointment wiil give you an oppurtunity to talk to the doctor about various 
+                             health issues that you have.
+                         </p>
+                     </div>
+                     <div class="d-flex">
+                         <span class="text-danger">Fee: </span><span class="text-danger appointment_price"></span>
+                     </div>
+                    
+                    <br class="my-2">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#paymentspage">Continue</button>
+                        </li>
+                    </ul>
+                    </div>
+                 <!-- end of appointment description page-->
+                 <!--Start of Payments Page-->
+                 <div class="tab-pane fade" role="tabpanel" id="paymentspage">
+                    <div class="specialist alert-top d-flex justify-content-between flex-column-reverse flex-sm-row">
+                        <div class="personal-info d-flex flex-column">
+                            <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Name</Label><Span class="specialist_name"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Email</Label><Span class="specialist_email"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Phone</Label><Span class="specialist_phone"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">Country</Label><Span class="specialist_country"></Span></div>
+                           <div class="d-flex p-2 align-items-center"> <Label class=" mx-2 ">City</Label><Span class="specialist_city"></Span></div>
+                               <div class="specialization p-2">
+                                   <label for="">Specialization</label>
+                                   <div>
+                                       <ul  class="specialistSpecialization">
+                                           
+                                       </ul>
+                                   </div>
+                               </div>
+                        </div>
+                        <div class="doctor-profile-img-container" style="max-width: 200px; max-height: 200px;">
+                            <img src="${imgSrc}"  class="rounded" alt="" style="width: 80%;height: 80%;">
+                        </div>
+                    </div>
+                    <div class="availability-container d-flex border-top border-success border-2 py-3">
+                            <div class="d-flex"><label for="">Availability: </label><span class="mx-2">Available</span></div>
+                            <div class="d-flex align-items-center"><i class="fas fa-bullseye mx-2 text-danger"></i><span>Online</span></div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="py-2">Selected  Appointment</span>
+                        <span class="py-2 d-block bg-info"><i class="fas fa-check-circle text-light"></i><span class="selected_appointment"></span></span>
+                     </div>
+                     <div class="p-2">
+                         <p class="lead">
+                             This type of appointment wiil give you an oppurtunity to talk to the doctor about various 
+                             health issues that you have.
+                         </p>
+                     </div>
+                     <div class="d-flex">
+                         <span class="text-danger">Fee: </span><span class="text-danger appointment_price"></span>
+                     </div>
+                     <div class="border-top border-success border-2 my-2"></div>
+                        <div class="p-2">
+                            <span class="lead text-success">Submit your option.</span>
+                        </div>
+                        <button class="btn btn-lg btn-success my-2 p-2" id="submit_appointment"><div class="spinner-border spinner-border-sm d-none" role="satus" id="submitappointment-spinner"></div>  Submit</button>
+                        
+                    </div>
+                    `;
+                var jalert=$(alert)
+                jalert.css({
+                    "z-index":1000,
+                    top:`${scrollY}px`,
+                    left:"25px"
+                })
+                document.querySelectorAll('.alert').forEach(alert=>{
+                    var balert=new bootstrap.Alert(alert)
+                    balert.close()
+                })
+                
+               
+                $(event.target).closest(".tab-content").append(jalert)
+                 
+                })
+            })
+
+            //profile image change
+                var profileImgInput=document.getElementById("profile_image");
+                var imgElem=document.getElementById("profile_img");
+                profileImgInput.addEventListener("change",function(){
+                    var file=this.files[0]
+                    var url=URL.createObjectURL(file)
+                    imgElem.src=url
+                })
+            //end of profile image change
+
+            //dashboard collapse
+                 var dashboardCollapse=document.getElementById("dashboard-collapse");
+                 var tabsContent=document.querySelector(".tabs-content");
+
+                 dashboardCollapse.addEventListener("shown.bs.collapse",function(){
+                     console.log("collapse shown");
+                     $(tabsContent).css("width","90%");
+                 })
+            //end of dashboard collapse
+
+            //dropdown
+             var specialistDropdown=document.getElementById("specialistDropdownMenu");
+             var specialistDropdownToggler=document.getElementById("specialistDropdownMenutoggler");
+             specialistDropdownToggler.addEventListener("click",function(){
+                 $(specialistDropdown).toggleClass("d-none")
+             })
+            //end of dropdown
+
+            //delete msg
+             var deleteMsg=document.querySelectorAll(".delete-msg-btn")
+            
+             deleteMsg.forEach(btn=>{
+                 btn.addEventListener("click",deleteMessage)
+                 
+             })
+
+             //delete function
+             function deleteMessage(event){
+                     console.log("delete clicked");
+                     var msgId=event.target.getAttribute("data-id")
+                     $(event.target).parent().parent().parent().remove()
+                     function getCookie(name) {
+                                let cookieValue = null;
+                               if (document.cookie && document.cookie !== '') {
+                                      const cookies = document.cookie.split(';');
+                                      for (let i = 0; i < cookies.length; i++) {
+                                      const cookie = cookies[i].trim();
+                                      // Does this cookie string begin with the name we want?
+                                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                          break;
+                                       }
+                                       }
+                                      }
+                                      return cookieValue;
+                                      }
+                                  const csrftoken = getCookie('csrftoken');
+                 $.ajax({
+                     url:"/doctoronline/deletepatientmessage/",
+                     method:"POST",
+                     data:{
+                         "message_id":msgId
+                     },
+                     headers:{
+                         "X-CSRFToken":csrftoken
+                     }
+                 }).done(function(response){
+                     if(response.deleted===true){
+                         
+                     }
+                 }).fail(function(err){
+                    console.log(err);
+                 })
+                 }
+             //end of delete function
+            //end delete msg
+
+            //delete appointment
+               var deleteAppointmentBtns=document.querySelectorAll(".appointment_delete_btn");
+               deleteAppointmentBtns.forEach(btn=>{
+                    btn.addEventListener("click",deleteAppointment)
+               })
+               function deleteAppointment(event){
+                var msgId=event.target.getAttribute("data-id")
+                console.log("appointment_id: ",msgId);
+                     $(event.target).parent().parent().remove()
+                     function getCookie(name) {
+                                let cookieValue = null;
+                               if (document.cookie && document.cookie !== '') {
+                                      const cookies = document.cookie.split(';');
+                                      for (let i = 0; i < cookies.length; i++) {
+                                      const cookie = cookies[i].trim();
+                                      // Does this cookie string begin with the name we want?
+                                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                          break;
+                                       }
+                                       }
+                                      }
+                                      return cookieValue;
+                                      }
+                                  const csrftoken = getCookie('csrftoken');
+                 $.ajax({
+                     url:"/doctoronline/deletePatientAppointment/",
+                     method:"POST",
+                     data:{
+                         "appointment_id":msgId
+                     },
+                     headers:{
+                         "X-CSRFToken":csrftoken
+                     }
+                 }).done(function(response){
+                     if(response.deleted===true){
+                         
+                     }
+                 }).fail(function(err){
+                    console.log(err);
+                 })
+               }
+            //end delete appointment
+
+            //video
+            var videoBtn=document.getElementById("start_video");
+            var videoElem=document.getElementById("appointment_video");
+            videoBtn.addEventListener("click",function(){
+                navigator.mediaDevices.getUserMedia({"audio":true,video:true}).then(stream=>{
+                  videoElem.srcObject=stream
+                  videoElem.onloadedmetadata=function(e){
+                      videoElem.play()
+                  }
+                })
+            })
+            var capturescreenBtn=document.getElementById("capture_screen");
+            capturescreenBtn.addEventListener("click",function(event){
+                navigator.mediaDevices.getDisplayMedia({"audio":true,video:true})
+                .then(stream=>{
+                    videoElem.srcObject=stream
+                  videoElem.onloadedmetadata=function(e){
+                      videoElem.play()
+                  }
+                })
+            })
+            //end video
+
+            //appointment view
+            var appointmentview=document.querySelectorAll(".appointment_view_btn")
+            var appointmentVideoAlert=document.getElementById("appointment-video-alert")
+            appointmentview.forEach(btn=>{
+                btn.addEventListener("click",function(){
+                    $(appointmentVideoAlert).toggleClass("d-none")
+                })
+            })
+
+            var appointmentvideoalertbtn=document.getElementById("appointment-video-alert-btn")
+            appointmentvideoalertbtn.addEventListener("click",function(){
+                $(appointmentVideoAlert).toggleClass("d-none")
+            })
+            //end of appointment view
+
+            //ambulances
+            var viewAmbulanceBtns=document.querySelectorAll(".ambulance-view-details");
+            viewAmbulanceBtns.forEach(btn=>{
+                btn.addEventListener("click",viewAmbulance)
+            })
+            function viewAmbulance(event){
+                event.preventDefault();
+                var ambulanceId=event.target.getAttribute("data-id");
+                var userId=event.target.getAttribute("data-user");
+                var img=$(event.target).parent().parent().find("img").attr("src");
+                var ambulanceAlert=document.createElement("div");
+                ambulanceAlert.classList.add("alert","bg-white","shadow-lg",
+                "rounded","border","border-light","border-1","position-absolute","fade","show");
+                ambulanceAlert.setAttribute("role","alert");
+                ambulanceAlert.setAttribute("data-bs-dismissible","true");
+                ambulanceAlert.setAttribute("id","ambulance-alert");
+                ambulanceAlert.innerHTML=`
+                <button class="btn-close position-absolute top-0 end-0" data-bs-dismiss="alert" role="alert"></button>
+                <div class="ambulance-information d-flex">
+            <div class="ambulance-details d-flex flex-column p-2 w-50 border border-light rounded me-2">
+              <div class="d-flex align-items-center"><span class="mx-2">Number Plate:</span><span id="ambulance-plate" class="lead"></span></div>
+              <div class="d-flex justify-content-between p-2 my-2 border-top border-light border-2">
+                <span>Driver</span>
+                <div class="d-flex flex-column">
+                  <div class="driver-img-container rounded-pill p-2 border border-2 border-light bg-light" style="width: 120px;height: 115px;">
+                    <img src="" class="rounded-pill" alt="" style="width: 100%;height: 100%;" id="ambulance-driver-image" >
+                  </div>
+                  <div class="d-flex flex-column" id="driver-info">
+                    <span id="ambulance-driver-name"></span>
+                    <span id="ambulance-driver-phone" class="text-decoration-underline"></span>
+                    <span id="ambulance-driver-email" class="text-decoration-underline"></span>
+                  </div>
+                </div>
+        
+              </div>     
+            </div>
+            <div class="ambulance-img-container w-50 p-2 border border-light rounded">
+              <img src="${img}" alt="" style="width: 100%;height: 100%;">
+            </div>
+       </div>
+       <!--body content-->
+       <div class="d-flex my-2 border border-light border-2 rounded">
+           
+             <div class="tab-content p-2 w-100">
+               <div class="tab-pane fade show active" role="tabpanel" id="ambulance-main">
+                <ul class="nav nav-tabs border-0" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <a href="#ambulance-payment" class="nav-link bg-primary border-none text-light" data-bs-toggle="tab" role="presentation">Book Now</a>
+                   </li>
+                </ul>
+               </div>
+              
+               <div class="container-fluid tab-pane fade w-100" id="ambulance-payment"  role="tabpanel">
+                <ul class="nav nav-tabs border-0" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <a href="#ambulance-main" class="nav-link" data-bs-toggle="tab" role="presentation"><i class="fas fa-arrow-left"></i> Back</a>
+                   </li>
+                </ul>
+                <div class="container-fluid d-flex justify-content-between">
+                     <div class="d-flex flex-column">
+                       <span class="lead border-bottom border-info border-2">Pay Here</span>
+                       <div class="pay-now p-2">
+
+                      </div>
+                     </div>
+                      <button class="btn btn-primary mx-2" id="ambulance-paylater" style="height: fit-content;">
+                      <div class="spinner-border spinner-border-sm d-none" id="book-ambulance-spinner"></div> Pay Later</button>
+                </div>
+               </div>
+             </div>
+       </div>
+                `;
+                var scrollY=window.scrollY
+                $(ambulanceAlert).css({
+                    "min-width":"600px",
+                    "z-index":2000,
+                    "top":scrollY
+                }) 
+
+                var aalert=document.getElementById("ambulance-alert");
+                if(aalert !== undefined){
+                    var balert=new bootstrap.Alert(aalert);
+                    balert.close();
+                }
+                $(document.body).append(ambulanceAlert)
+                paypal.Buttons().render(".pay-now")
+                //get ambulance details
+                var NumberPlate=document.getElementById("ambulance-plate");
+                var driverPhoto=document.getElementById("ambulance-driver-image");
+                var driverName=document.getElementById("ambulance-driver-name");
+                var driverPhone=document.getElementById("ambulance-driver-phone");
+                var driverEmail=document.getElementById("ambulance-driver-email");
+                var ambulancepayLater=document.getElementById("ambulance-paylater");
+                var bookAmbulanceSpinner=document.getElementById("book-ambulance-spinner");
+
+                //ajax ambulance details
+                     $.ajax({
+                         url:"/doctoronline/ambulancedetails/",
+                         data:{
+                             "ambulance_id":ambulanceId
+                         }
+                     }).done(function(result){
+                         console.log(result.data);
+                         var data=result.data;
+                         NumberPlate.innerText=data["plate"]
+                         driverPhoto.src=data["driver_photo"]
+                         driverName.innerText=data["driver_name"]
+                         driverPhone.innerText=data["driver_phone"]
+                         driverEmail.innerText=data["driver_email"]
+                     }).fail(function(err){
+                         console.log(err);
+                     })
+                //end of ajax ambulance details
+
+                //book ambulance
+                  ambulancepayLater.addEventListener("click",function(){
+                    event.target.enabled=false
+                    $(bookAmbulanceSpinner).toggleClass("d-none")
+                    function getCookie(name) {
+                                let cookieValue = null;
+                               if (document.cookie && document.cookie !== '') {
+                                      const cookies = document.cookie.split(';');
+                                      for (let i = 0; i < cookies.length; i++) {
+                                      const cookie = cookies[i].trim();
+                                      // Does this cookie string begin with the name we want?
+                                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                          break;
+                                       }
+                                       }
+                                      }
+                                      return cookieValue;
+                                      }
+                                  const csrftoken = getCookie('csrftoken');
+                    $.ajax({
+                        url:"/doctoronline/bookambulance/",
+                        method:"POST",
+                        headers:{
+                            "X-CSRFToken":csrftoken
+                        },
+                        data:{
+                            "ambulance_id":ambulanceId,
+                            "user_id":userId
+                        }
+                    }).done(function(result){
+                        console.log(result.data);
+                        var aalert=document.getElementById("ambulance-alert");
+                        $(bookAmbulanceSpinner).toggleClass("d-none")
+                        $(aalert).remove()
+
+                    }).fail(function(err){
+                        console.log(err);
+                        $(bookAmbulanceSpinner).toggleClass("d-none")
+                    })
+                  });
+                //end book ambulance
+               
+            }
+           
+           
+            //end of ambulances
+        })
+    </script>
+    <script src="https://www.paypal.com/sdk/js?client-id=test"></script>
+   
+    {% endblock otherjs%}
+
+    {% endblock all %}

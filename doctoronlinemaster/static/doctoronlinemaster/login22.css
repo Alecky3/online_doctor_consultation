@@ -1,0 +1,43 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+.main-login-container{
+    
+    background-image: linear-gradient(
+        45deg,rgb(232 30 30 / 76%),#0000ff5e),url("../doctoronlinemaster/static/Images/Doctors/dr1.jpg");
+    background-repeat: no-repeat,no-repeat;
+    background-size: cover,cover;
+}
+.main-signup-container{
+    min-height: 100vh;
+    background-image: linear-gradient(
+        45deg,rgb(232 30 30 / 76%),#0000ff5e),url("{% static 'doctoronlinemaster/Images/Doctors/dr1.jpg' %}");
+    background-repeat: no-repeat,no-repeat;
+    background-size: cover,cover;
+    /* height: 100%; */
+}
+.login-container-right{
+    background: linear-gradient(45deg,blue,tomato);
+}
+.main-signup-container .tab-content{
+    /* min-height: 200px ; */
+    width: 100%;
+    /* height: 100%; */
+
+}
+.signup-container{
+    width: 100%;
+}
+.signup-details{
+    width: 100%;
+    background: whitesmoke;
+}
+.input-container > label{
+    min-width: 100px !important;
+}

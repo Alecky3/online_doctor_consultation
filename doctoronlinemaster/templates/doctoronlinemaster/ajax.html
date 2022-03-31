@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Requests</title>
+    {% load static %}
+    <script src="{% static 'doctoronlinemaster/jquery-3.5.1.js' %}"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                url: "/doctoronline/getJson/",
+                method: "GET",
+                data:{
+                    "mydata":"Alex Muthini",
+                },
+                dataType: "JSON"
+            })
+            .done(function(data){
+               var objects=data["about"]
+               console.log(JSON.stringify(objects));
+                // objects.forEach(element => {
+                    
+                //         $("<img>").attr({
+                //             id:element["id"],
+                //             src:"/mymedia/"+element["image"],
+                //             width:"100",
+                //             height:"100"
+                //         }).appendTo("body")
+                    
+                // });
+               
+            // $("<h1>").text(myData).appendTo("body")
+        })
+        .fail(function(xhr,status,err){
+            console.log("Error occured: ",err);
+            console.log("status code: ",status);
+            console.dir(xhr)
+        })
+        .always(function(){
+            console.log("Request Finished");
+        })
+        })
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+{% extends "doctoronlinemaster/main.html" %}
+{% block maintitle %}
+  SignUp
+{% endblock maintitle %}
+
+{% block otherstyles %}
+   {% load static %}
+   <link rel="stylesheet" href="{% static '/doctoronlinemaster/login22.css' %}">
+{% endblock otherstyles %}
+
+{% block mainslider%}
+{% endblock mainslider %}
+
+{% block maincontent %}
+    <div class="container-fluid main-signup-container d-flex justify-content-center align-items-center p-1 p-sm-2">
+        <div class="signup-container h-100 row align-items-center  px-1 px-md-2">
+                <div class="signup-details col d-flex flex-column align-items-center justify-content-center p-2">
+                    <ul class="nav nav-tabs rounded w-100" role="tablist" id="signuptablist"> 
+                        <li class="nav-item dropdown w-100 bg-white rounded" role="presentation">
+                            <a href="#account-type" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" arial-expanded="false" role="button">Account Type</a>
+                            <ul class="dropdown-menu " id="account-type">
+                                <li class="dropdown-item "><button class="nav-link border-0" type="button" data-bs-toggle="tab" role="tab" data-bs-target="#patients">Patient | Customer</button></li>
+                                <li class="dropdown-item "><button class="nav-link border-0" type="button" data-bs-toggle="tab" role="tab" data-bs-target="#doctors">Doctors | Other Specialists</button></li>
+                            </ul>
+                            <!-- <button class="nav-link active" data-bs-toggle="tab" type="button" data-bs-target="#patients" role="tab">Patients | Customers</button> -->
+                        </li>
+                        <!-- <li class="nav-item" role="presentation">
+                            <button class="nav-link" type="button" data-bs-toggle="tab" data-bs-target="#doctors" role="tab">Doctors | Other Specialists</button>
+                        </li> -->
+                    </ul>  
+                    <div class="tab-content">
+                        <div class="tab-pane fade {% if not currentindex %} show active  {% endif %} p-2 h-100" role="tabpanel" id="patients">
+                            <form action="{% url 'doctoronlinemaster:signuppatient' %}" class="d-flex bg-white w-100 p-2 p-md-4 flex-column rounded position-relative" method="POST">
+                                {% csrf_token %}
+                                {% if usererror %}
+                                <div class="toast align-items-center text-white show bg-primary w-100 border-0 position-absolute bottom-100 start-0" id="loginerroralert" role="alert" aria-live="assertive" aria-atomic="true">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                      <div class="toast-body">
+                                        {{usererror}}
+                                      </div>
+                                      <button type="button" class="btn-close btn-close-white me-2 m-auto" id="loginerrorBtnClose" data-bs-dismiss="toast" data-bs-target="#loginerroralert" aria-label="Close"></button>
+                                    </div>
+                                  </div>
+                                {% endif %}
+                                <div class="input-container d-flex flex-column flex-md-row align-items-center ">
+                                  <label for="" class="form-label fs-5">Email</label>
+                                  <input type="email" name="email" id="email" class="form-control p-2 m-2" placeholder="example@gmail.com">
+                               </div>
+                               <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                <label for="" class="form-label fs-5">Password</label>
+                                <input type="password" name="password" id="password" class="form-control p-2 m-2" placeholder="Password">
+                               </div>
+                               <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                <label for="" class="form-label fs-5 text-nowrap">Confirm Password</label>
+                                <input type="password" class="form-control p-2 m-2" placeholder="Password">
+                               </div>
+                              <button class="btn btn-lg btn-primary mt-3" type="submit">
+                                SignUp <span class="text-warning" style="font-size: x-small;">Patient|Anonymous</span></button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade {% if currentindex %} show active {% endif %}" role="tabpanel" id="doctors">
+                            <form action="{% url 'doctoronlinemaster:signup' %}" class="d-flex position-relative bg-white w-100 p-2 mt-2 flex-column rounded" method="POST">
+                                {% csrf_token %}
+                                {% if usererror %}
+                                <div class="toast align-items-center text-white show bg-primary w-100 border-0 position-absolute bottom-100 start-0" id="loginerroralertspecialist" role="alert" aria-live="assertive" aria-atomic="true">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                      <div class="toast-body">
+                                        {{usererror}}
+                                      </div>
+                                      <button type="button" class="btn-close btn-close-white me-2 m-auto" id="loginerrorBtnCloseSpecialist" data-bs-dismiss="toast" data-bs-target="#loginerroralertspecialist" aria-label="Close"></button>
+                                    </div>
+                                  </div>
+                                {% endif %}
+                                <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                    <label for="" class="form-label fs-5 text-nowrap">First Name</label>
+                                    <input type="text" name="doctor_fname" id="doctor_fname"  class="form-control p-2 m-2 " placeholder="First Name">
+                                 </div>
+                                 <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                    <label for="" class="form-label fs-5 text-nowrap">Last Name</label>
+                                    <input type="text" name="doctor_lname" id="doctor_lname"  class="form-control p-2 m-2 " placeholder="Last Name">
+                                 </div>
+                                <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                   <label for="" class="form-label fs-5">Email</label>
+                                   <input type="email" name="doctor_email" id="doctor_email"  class="form-control p-2 m-2" placeholder="example@gmail.com">
+                                </div>
+                                <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                    <label for="" class="form-label fs-5 text-nowrap">Phone</label>
+                                     
+                                    <input type="tel" name="doctor_phone" id="doctor_phone" class="form-control p-2 m-2" placeholder="+25412345678">
+                                </div>
+                                <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                    <label for="" class="form-label fs-5 text-nowrap">Country</label>
+                                    <select name="country" id="country" class="form-select m-2">
+                                        {% if countries %}
+                                           {% for country in countries %}
+                                             <option value="{{country}}">{{country}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                    <label for="" class="form-label fs-5 text-nowrap">City</label>
+                                    <select name="city" id="city" class="form-select m-2">
+                                        {% if cities %}
+                                           {% for city in cities %}
+                                             <option value="{{city}}">{{city}}</option>
+                                           {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                   </div>
+                                   <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                    <label for="" class="form-label fs-5">Password</label>
+                                    <input type="password" name="doctor_password" id="doctor_password" class="form-control p-2 m-2" placeholder="Password">
+                                   </div>
+                                   <div class="input-container d-flex flex-column flex-md-row align-items-center">
+                                    <label for="" class="form-label fs-5 ">Confirm Password</label>
+                                    <input type="password" class="form-control p-2 m-2" placeholder="Password">
+                                   </div>
+                                   <button class="btn btn-lg btn-primary mt-3" type="submit">
+                                    SignUp <span class="text-warning" style="font-size: x-small;">Doctor|Specialist</span></button>
+                             </form>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="login-container-right d-none d-sm-flex flex-column col p-5  text-light">
+                      <p class="lead" style="font-size: large">
+                          Sign Up for an account to Access our services. 
+                      </p>
+                      <p class="lead" style="font-size: 1.5em;">
+                          You are a medial Institution and wish to reach more People This is the best Platform in the 
+                          Market where you can reach greater Audience.
+                      </p>
+                      <button class="btn btn-lg btn-outline-primary mt-auto">Get Started <i class="fas fa-chevron-right"></i></button>
+                </div>
+        </div>
+    </div>
+{% endblock maincontent%}
+
+{% block otherjs %}
+    <script>
+        var errorContainer=document.getElementById("loginerroralert");
+        var errorBtnClose=document.getElementById("loginerrorBtnClose")
+        errorBtnClose.addEventListener("click",function(){
+            errorContainer.classList.remove("show")
+            errorContainer.style="z-index:-1"
+        })
+
+        var specialistBtnClose=document.getElementById("loginerrorBtnCloseSpecialist")
+        var specialistContainer=document.getElementById("loginerroralertspecialist")
+        specialistBtnClose.addEventListener("click",function(){
+            specialistContainer.classList.remove("show")
+            specialistContainer.style="z-index:-1"
+        })
+    </script>
+{% endblock otherjs %}
+
+{% block  mainfooter %}
+{% endblock mainfooter %}
